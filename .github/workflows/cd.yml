@@ -1,8 +1,10 @@
-name: cd pipeline deploy to prod
+name: CD pipeline deploy to prod
 
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["CI Pipeline"] # This ensures CD runs only after CI succeeds
+    types:
+      - completed
 jobs:
   deploy:
     runs-on: ubuntu-latest
