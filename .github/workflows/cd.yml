@@ -1,4 +1,4 @@
-name: ci-cd pipeline deploy to prod
+name: cd pipeline deploy to prod
 
 on:
   push:
