@@ -13,12 +13,10 @@ app.get("/", (req, res) => {
            <title>Personal finance managment project</title>
          </head>
          <body>
-          <h1>Personal finance managment app</h1>
+          <h1>Personal finance managment app updated!</h1>
          </body>
     </html>`);
 });
-// Start the server and listen on the specified port
 app.listen(port, () => {
-    // Log a message when the server is successfully running
     console.log(`Server is running on http://localhost:${port}`);
 });
