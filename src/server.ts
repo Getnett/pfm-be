@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
            <title>Personal finance managment project</title>
          </head>
          <body>
-          <h1>Personal finance managment app</h1>
+          <h1>Personal finance managment app updated!</h1>
          </body>
     </html>`);
 });
