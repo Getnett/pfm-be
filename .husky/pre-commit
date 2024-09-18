@@ -4,7 +4,7 @@
 # Run the build
 npm run build
 
-# Check for unstaged changes after the build and stage them
+# Check for unstaged changes after build
 if [ -n "$(git status --porcelain)" ]; then
   echo "Staging changes after the build process."
   git add .
