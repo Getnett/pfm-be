@@ -1,4 +1,11 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Run the build
 npm run build
+
+# Check for unstaged changes after build
+if [ -n "$(git status --porcelain)" ]; then
+  echo "There are changes after the build process. Please stage them before committing."
+  exit 1 # Abort commit
+fi

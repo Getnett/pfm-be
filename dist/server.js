@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
            <title>Personal finance managment project</title>
          </head>
          <body>
-          <h1>Personal finance managment app updated! npm cache!check again!</h1>
+          <h1>Personal finance managment app updated! as a new project!</h1>
          </body>
     </html>`);
 });
