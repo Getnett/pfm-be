@@ -25,6 +25,8 @@ jobs:
       - run: npm ci
       - name: Build typescript
         run: npm run build
+      - name: test
+        run: npm test
   deploy:
     needs: test
     runs-on: ubuntu-latest
