@@ -26,6 +26,7 @@ jobs:
       - name: Build typescript
         run: npm run build
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Get Github action IP
