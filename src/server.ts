@@ -11,11 +11,11 @@ app.get("/", (req, res) => {
            <title>Personal finance managment project</title>
          </head>
          <body>
-          <h1>Personal finance managment app updated! almost ready for dev :) :)</h1>
+          <h1>Personal finance managment app updated! almost ready for dev.</h1>
          </body>
     </html>`);
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is  running on http://localhost:${port}`);
 });
