@@ -13,14 +13,13 @@ exports.up = (pgm) => {
     CREATE TABLE accounts(
         id SERIAL PRIMARY KEY,
         account_name VARHAR(50) NOT NULL UNIQUE,
-        balance INTEGER NOT NULL ,
+        balance INTEGER NOT NULL DEFAULT 0,
         note TEXT ,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        currency_id INTEGER NOT NULL REFERENCES currencies(id),
-        account_type INTEGER  NOT NULL REFERENCES account_types(id) ,
-        account_icon INTEGER NOT NULL REFERENCES account_icons(id)
+        account_type INTEGER  REFERENCES account_types(id) ,
+        account_icon INTEGER  REFERENCES account_icons(id)
      );`);
 };
 

@@ -10,11 +10,14 @@ exports.shorthands = undefined;
  */
 exports.up = (pgm) => {
   pgm.sql(`
-      CREATE TABLE currencies (
-        id SERIAL PRIMARY KEY,
-        currency VARCHAR(20) NOT NULL UNIQUE DEFAULT birr
-    );
-     `);
+    INSERT INTO income_sources (income_source)
+    VALUES 
+    ('salary'),
+    ('investments'),
+    ('part_time'),
+    ('awards'),
+    ('others')
+    `);
 };
 
 /**
@@ -23,5 +26,14 @@ exports.up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 exports.down = (pgm) => {
-  pgm.sql(`DROP TABLE currencies;`);
+  pgm.sql(`DELETE FROM income_sources 
+         WHERE income_source IN 
+         (
+          'salary',
+          'investments',
+          'part_time',
+          'awards',
+          'others'
+         )
+      `);
 };

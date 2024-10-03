@@ -10,10 +10,15 @@ exports.shorthands = undefined;
  */
 exports.up = (pgm) => {
   pgm.sql(`
-        CREATE TABLE account_types(
-            id SERIAL PRIMARY KEY,
-            account_type VARCHAR(30) NOT NULL UNIQUE
-    ); `);
+    INSERT INTO account_types (account_type)  
+    VALUES 
+      ('default'),
+      ('cash'),
+      ('debit_card'),
+      ('investment'),
+      ('credit_card'),
+      ('virtual_account')
+ `);
 };
 
 /**
@@ -22,5 +27,17 @@ exports.up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 exports.down = (pgm) => {
-  pgm.sql(`DROP TABLE account_types;`);
+  pgm.sql(
+    `DELETE FROM account_types 
+     WHERE account_type IN 
+     (
+     'default',
+     'cash',
+     'debit_card',
+     'investment',
+     'credit_card',
+     'virtual_account'
+     )
+     `
+  );
 };
