@@ -1,12 +1,13 @@
-import express from "express";
-
-const app = express();
+import app from "./app";
 
 const port = 3000;
 
-app.get("/", (req, res) => {
+const serverInstance = app();
+
+serverInstance.get("/", (_req, res) => {
   // Send a response to the client
-  res.send(`<html>
+  res.send(`
+   <html>
          <head>
            <title>Personal finance managment project</title>
          </head>
@@ -16,6 +17,6 @@ app.get("/", (req, res) => {
     </html>`);
 });
 
-app.listen(port, () => {
+serverInstance.listen(port, () => {
   console.log(`Server is  running on http://localhost:${port}`);
 });
