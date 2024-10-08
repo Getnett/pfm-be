@@ -57,8 +57,7 @@ jobs:
             git pull origin main
             npm install
             pm2 restart pfm-be
-            export DATABASE_URL=${{ secrets.RDS_DATABASE_URL }}
-            npx node-pg-migrate up
+            export DATABASE_URL=${{ secrets.RDS_DATABASE_URL }} npm run migrate
 
       - name: Remove Github Actions IP from security group
         run: |
