@@ -57,9 +57,6 @@ jobs:
             git pull origin main
             npm install
             pm2 restart pfm-be
-
-            # Run migrations after deployment
-
             export DATABASE_URL=${{ secrets.RDS_DATABASE_URL }}
             npx node-pg-migrate up
 
