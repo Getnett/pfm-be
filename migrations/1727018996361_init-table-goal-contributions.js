@@ -13,7 +13,8 @@ exports.up = (pgm) => {
              id SERIAL PRIMARY KEY,
              amount INTEGER NOT NULL,
              user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-             goal_id INTEGER NOT NULL REFERENCES finacial_goals(id) ON DELETE CASCADE
+             goal_id INTEGER NOT NULL REFERENCES financial_goals(id) ON DELETE CASCADE
+             
     );`);
 };
 

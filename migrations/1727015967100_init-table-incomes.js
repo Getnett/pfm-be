@@ -16,7 +16,7 @@ exports.up = (pgm) => {
         date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         note TEXT,
         user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        income_sources_id INTEGER NOT NULL REFERENCES income_sources(id)
+        income_sources_id INTEGER NOT NULL REFERENCES income_sources(id),
         account_id INTEGER REFERENCES accounts(id)
       );
     `);

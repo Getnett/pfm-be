@@ -14,9 +14,9 @@ exports.up = (pgm) => {
         id SERIAL PRIMARY KEY,
         amount INTEGER NOT NULL,
         date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        note TEXT
+        note TEXT,
         user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        category_id INTEGER NOT NULL REFERENCES categories(id)
+        category_id INTEGER NOT NULL REFERENCES categories(id),
         account_id INTEGER REFERENCES accounts(id) 
     );`);
 };

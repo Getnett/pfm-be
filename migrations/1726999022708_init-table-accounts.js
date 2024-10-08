@@ -12,7 +12,7 @@ exports.up = (pgm) => {
   pgm.sql(`
     CREATE TABLE accounts(
         id SERIAL PRIMARY KEY,
-        account_name VARHAR(50) NOT NULL UNIQUE,
+        account_name VARCHAR(50) NOT NULL UNIQUE,
         balance INTEGER NOT NULL DEFAULT 0,
         note TEXT ,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
