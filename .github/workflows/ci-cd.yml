@@ -57,9 +57,14 @@ jobs:
             git pull origin main
             npm install
             pm2 restart pfm-be
-            # Set the DATABASE_URL and run migrations
-            DATABASE_URL=${{ secrets.RDS_DATABASE_URL }} npm run migrate up
-            echo "DATABASE_URL is set to: $DATABASE_URL"  # Debug step
+
+            # Set the DATABASE_URL environment variable and save it
+            echo 'export DATABASE_URL="${{ secrets.DATABASE_URL }}"' >> ~/.bashrc
+
+            # Source the .bashrc to load the new environment variable
+            source ~/.bashrc
+
+            npm run migrate up
 
       - name: Remove Github Actions IP from security group
         run: |
