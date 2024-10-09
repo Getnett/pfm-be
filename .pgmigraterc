@@ -1,5 +1,8 @@
 {
   "databaseUrl": "${DATABASE_URL}",
   "migrationsTable": "pgmigrations",
-  "dir": "migrations"
+  "dir": "migrations",
+  "ssl": {
+    "rejectUnauthorized": false
+  }
 }
