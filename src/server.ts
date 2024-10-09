@@ -1,7 +1,8 @@
 require("dotenv").config();
 import app from "./app";
+import dbpool from "./db_pool";
 
-const port = 3000;
+const PORT = 3000;
 
 const serverInstance = app();
 
@@ -13,11 +14,20 @@ serverInstance.get("/", (_req, res) => {
            <title>Personal finance managment project</title>
          </head>
          <body>
-          <h1>Personal finance managment app updated! almost ready for dev.</h1>
+          <h1>Personal finance managment app updated!</h1>
          </body>
     </html>`);
 });
 
-serverInstance.listen(port, () => {
-  console.log(`Server is  running on http://localhost:${port}`);
-});
+dbpool
+  .connect(process.env.DATABASE_URL || "")
+  .then((res) => {
+    console.log("🚀 Established database database connection!");
+    serverInstance.listen(PORT, () => {
+      console.log(`Server is  running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log(" ❌ Connection to database failed!");
+    console.error(error);
+  });
