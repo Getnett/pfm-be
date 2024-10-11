@@ -30,8 +30,7 @@ class DbPool {
         }
     }
     query(queryString, params) {
-        var _a;
-        return (_a = __classPrivateFieldGet(this, _DbPool__pool, "f")) === null || _a === void 0 ? void 0 : _a.query(queryString, params);
+        return __classPrivateFieldGet(this, _DbPool__pool, "f").query(queryString, params);
     }
 }
 _DbPool__pool = new WeakMap();

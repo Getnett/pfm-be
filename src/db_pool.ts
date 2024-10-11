@@ -14,8 +14,8 @@ class DbPool {
     }
   }
 
-  query(queryString: string, params: any) {
-    return this.#_pool?.query(queryString, params);
+  query(queryString: string, params?: any) {
+    return this.#_pool!.query(queryString, params);
   }
 }
 

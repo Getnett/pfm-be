@@ -21,7 +21,7 @@ serverInstance.get("/", (_req, res) => {
 
 dbpool
   .connect(process.env.DATABASE_URL || "")
-  .then((res) => {
+  .then((_res) => {
     console.log("🚀 Established database database connection!");
     serverInstance.listen(PORT, () => {
       console.log(`Server is  running on http://localhost:${PORT}`);
