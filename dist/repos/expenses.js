@@ -36,6 +36,7 @@ class ExpensesRepo {
             return (0, to_camel_case_1.default)(rows)[0];
         });
     }
+    // reqBody change type
     static updateExpense(id, reqBody) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = "UPDATE expenses SET";
@@ -45,7 +46,6 @@ class ExpensesRepo {
                 const snakeCase = key.replace(/[A-Z]/g, ($1) => $1.toLowerCase().replace("", "_"));
                 console.log(snakeCase);
                 fieldsToUpdate.push(`${snakeCase} = $${index + 1}`);
-                console.log(fieldsToUpdate);
                 values.push(reqBody[key]);
             });
             query =
@@ -54,8 +54,6 @@ class ExpensesRepo {
                     fieldsToUpdate.join(", ") +
                     ` WHERE id = $${fieldsToUpdate.length + 1} RETURNING *;`;
             values.push(id);
-            console.log(query);
-            console.log(values);
             const { rows } = yield db_pool_1.default.query(query.toString(), values);
             return (0, to_camel_case_1.default)(rows)[0];
         });

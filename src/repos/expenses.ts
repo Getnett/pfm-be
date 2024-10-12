@@ -27,7 +27,7 @@ export default class ExpensesRepo {
 
     return toCamelCase(rows)[0];
   }
-
+  // reqBody change type
   static async updateExpense(id: string, reqBody: any) {
     let query = "UPDATE expenses SET";
 
@@ -42,7 +42,6 @@ export default class ExpensesRepo {
 
       fieldsToUpdate.push(`${snakeCase} = $${index + 1}`);
 
-      console.log(fieldsToUpdate);
       values.push(reqBody[key]);
     });
 
@@ -53,11 +52,7 @@ export default class ExpensesRepo {
       ` WHERE id = $${fieldsToUpdate.length + 1} RETURNING *;`;
 
     values.push(id);
-    console.log(query);
-    console.log(values);
-
     const { rows } = await dbpool.query(query.toString(), values);
-
     return toCamelCase(rows)[0];
   }
 
