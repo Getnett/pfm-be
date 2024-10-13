@@ -6,3 +6,12 @@ export interface ExpensePayload {
   categoryId: string;
   accountId?: string;
 }
+
+export interface IncomePayload {
+  amount: number;
+  note?: string;
+  date?: string;
+  userId: string;
+  incomeSourcesId: string;
+  accountId?: string;
+}
