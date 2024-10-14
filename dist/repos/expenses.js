@@ -30,10 +30,20 @@ class ExpensesRepo {
     static createExpense(reqBody) {
         return __awaiter(this, void 0, void 0, function* () {
             const { amount, date, note, categoryId, accountId } = reqBody;
-            const { rows } = yield db_pool_1.default.query(`
-    INSERT INTO expenses  (amount,date,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;
-    `, [amount, date, note, 1, categoryId, accountId]);
-            return (0, to_camel_case_1.default)(rows)[0];
+            let rowsData = [];
+            if (date) {
+                const { rows } = yield db_pool_1.default.query(`
+      INSERT INTO expenses  (amount,date,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;
+      `, [amount, date, note, 1, categoryId, accountId]);
+                rowsData = rows;
+            }
+            else {
+                const { rows } = yield db_pool_1.default.query(`
+      INSERT INTO expenses  (amount,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5) RETURNING *;
+      `, [amount, note, 1, categoryId, accountId]);
+                rowsData = rows;
+            }
+            return (0, to_camel_case_1.default)(rowsData)[0];
         });
     }
     // reqBody change type

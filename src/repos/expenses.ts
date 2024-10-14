@@ -18,14 +18,27 @@ export default class ExpensesRepo {
 
   static async createExpense(reqBody: ExpensePayload) {
     const { amount, date, note, categoryId, accountId } = reqBody;
-    const { rows } = await dbpool.query(
-      `
-    INSERT INTO expenses  (amount,date,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;
-    `,
-      [amount, date, note, 1, categoryId, accountId]
-    );
+    let rowsData = [];
 
-    return toCamelCase(rows)[0];
+    if (date) {
+      const { rows } = await dbpool.query(
+        `
+      INSERT INTO expenses  (amount,date,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;
+      `,
+        [amount, date, note, 1, categoryId, accountId]
+      );
+      rowsData = rows;
+    } else {
+      const { rows } = await dbpool.query(
+        `
+      INSERT INTO expenses  (amount,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5) RETURNING *;
+      `,
+        [amount, note, 1, categoryId, accountId]
+      );
+      rowsData = rows;
+    }
+
+    return toCamelCase(rowsData)[0];
   }
   // reqBody change type
   static async updateExpense(id: string, reqBody: any) {
