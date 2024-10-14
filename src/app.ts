@@ -1,6 +1,7 @@
 import express from "express";
 import expensesRoute from "./routes/expenses";
 import incomesRoute from "./routes/incomes";
+
 export default () => {
   const app = express();
 

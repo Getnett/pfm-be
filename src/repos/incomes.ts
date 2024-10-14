@@ -30,4 +30,12 @@ export default class IncomesRepo {
 
     return toCamelCase(rows)[0];
   }
+
+  static async deleteIncome(id: string) {
+    const { rows } = await dbPool.query(
+      "DELETE FROM  incomes WHERE id = $1 RETURNING *",
+      [id]
+    );
+    return toCamelCase(rows)[0];
+  }
 }
