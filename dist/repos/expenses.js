@@ -44,7 +44,6 @@ class ExpensesRepo {
             const values = [];
             Object.keys(reqBody).forEach((key, index) => {
                 const snakeCase = key.replace(/[A-Z]/g, ($1) => $1.toLowerCase().replace("", "_"));
-                console.log(snakeCase);
                 fieldsToUpdate.push(`${snakeCase} = $${index + 1}`);
                 values.push(reqBody[key]);
             });

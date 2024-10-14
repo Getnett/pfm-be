@@ -44,6 +44,17 @@ router.post("/api/incomes", (req, res, next) => __awaiter(void 0, void 0, void 0
         next(error);
     }
 }));
+router.patch("/api/incomes/:incomeId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { incomeId } = req.params;
+    const body = req.body;
+    try {
+        const resData = yield incomes_1.default.updateIncome(incomeId, body);
+        return res.status(200).send(resData);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 router.delete("/api/incomes/:incomeId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { incomeId } = req.params;
     const resData = yield incomes_1.default.deleteIncome(incomeId);

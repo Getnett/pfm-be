@@ -32,6 +32,17 @@ router.post("/api/incomes", async (req, res, next) => {
   }
 });
 
+router.patch("/api/incomes/:incomeId", async (req, res, next) => {
+  const { incomeId } = req.params;
+  const body = req.body;
+  try {
+    const resData = await IncomesRepo.updateIncome(incomeId, body);
+    return res.status(200).send(resData);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete("/api/incomes/:incomeId", async (req, res) => {
   const { incomeId } = req.params;
   const resData = await IncomesRepo.deleteIncome(incomeId);

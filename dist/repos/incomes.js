@@ -30,11 +30,44 @@ class IncomesRepo {
     static createIncome(reqBody) {
         return __awaiter(this, void 0, void 0, function* () {
             const { amount, note, date, incomeSourcesId, accountId } = reqBody;
-            const { rows } = yield db_pool_1.default.query(`INSERT INTO incomes (amount,note,date,user_id,income_sources_id,account_id) 
-       VALUES 
-       ($1,$2,$3,$4,$5,$6)
-       RETURNING *;
-      `, [amount, note, date, 1, incomeSourcesId, accountId]);
+            let rowsData = [];
+            // check if there is a better way
+            if (date) {
+                const { rows } = yield db_pool_1.default.query(`INSERT INTO incomes (amount,note,date,user_id,income_sources_id,account_id) 
+         VALUES 
+         ($1,$2,$3,$4,$5,$6)
+         RETURNING *;
+        `, [amount, note, date, 1, incomeSourcesId, accountId]);
+                rowsData = rows;
+            }
+            else {
+                const { rows } = yield db_pool_1.default.query(`INSERT INTO incomes (amount,note,user_id,income_sources_id,account_id) 
+         VALUES 
+         ($1,$2,$3,$4,$5)
+         RETURNING *;
+        `, [amount, note, 1, incomeSourcesId, accountId]);
+                rowsData = rows;
+            }
+            return (0, to_camel_case_1.default)(rowsData)[0];
+        });
+    }
+    static updateIncome(id, reqBody) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let query = "UPDATE incomes SET";
+            const fieldsToUpdate = [];
+            const values = [];
+            Object.keys(reqBody).forEach((key, index) => {
+                const snakeCasedField = key.replace(/[A-Z]/g, ($1) => $1.toLowerCase().replace("", "_"));
+                fieldsToUpdate.push(`${snakeCasedField} = $${index + 1}`);
+                values.push(reqBody[key]);
+            });
+            values.push(id);
+            query =
+                query +
+                    " " +
+                    fieldsToUpdate.join(", ") +
+                    ` WHERE id = $${fieldsToUpdate.length + 1} RETURNING *;`;
+            const { rows } = yield db_pool_1.default.query(query, values);
             return (0, to_camel_case_1.default)(rows)[0];
         });
     }
