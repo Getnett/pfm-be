@@ -23,7 +23,9 @@ class IncomesRepo {
     }
     static getIncome(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { rows } = yield db_pool_1.default.query("SELECT * FROM expenses WHERE id = $1", [id]);
+            const { rows } = yield db_pool_1.default.query("SELECT * FROM incomes WHERE id = $1", [
+                id,
+            ]);
             return (0, to_camel_case_1.default)(rows)[0];
         });
     }

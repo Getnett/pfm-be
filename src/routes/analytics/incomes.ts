@@ -1,12 +1,12 @@
 import express from "express";
-import ExpenseAnalytics from "../../repos/analytics/expenses/analytics";
+import IncomeAnalytics from "../../repos/analytics/incomes/analytics";
 
 const router = express.Router();
 
-router.get("/api/analytics/expenses/monthly_data", async (req, res, next) => {
+router.get("/api/analytics/incomes/monthly_data", async (req, res, next) => {
   const { month, year } = req.query;
   try {
-    const resData = await ExpenseAnalytics.getMonthlyAnalytics(
+    const resData = await IncomeAnalytics.getMonthlyAnalytics(
       Number(month),
       Number(year)
     );
@@ -17,12 +17,12 @@ router.get("/api/analytics/expenses/monthly_data", async (req, res, next) => {
   }
 });
 router.get(
-  "/api/analytics/expenses/monthly_daily_spend",
+  "/api/analytics/incomes/monthly_daily_sources",
   async (req, res, next) => {
     const { month, year } = req.query;
 
     try {
-      const resData = await ExpenseAnalytics.getMonthlyDailySpend(
+      const resData = await IncomeAnalytics.getMonthlyDailySourceIncomes(
         Number(month),
         Number(year)
       );
@@ -34,10 +34,10 @@ router.get(
   }
 );
 
-router.get("/api/analytics/expenses/yearly_data", async (req, res, next) => {
+router.get("/api/analytics/incomes/yearly_data", async (req, res, next) => {
   try {
     const { year } = req.query;
-    const resData = await ExpenseAnalytics.getYearlyAnalytics(Number(year));
+    const resData = await IncomeAnalytics.getYearlyAnalytics(Number(year));
     return res.status(200).send(resData);
   } catch (error) {
     next(error);
@@ -45,11 +45,11 @@ router.get("/api/analytics/expenses/yearly_data", async (req, res, next) => {
 });
 
 router.get(
-  "/api/analytics/expenses/yearly_monthly_spend",
+  "/api/analytics/incomes/yearly_monthly_sources",
   async (req, res, next) => {
     const { year } = req.query;
     try {
-      const resData = await ExpenseAnalytics.getYearlyMonthlySpend(
+      const resData = await IncomeAnalytics.getYearlyMontlyIncomeSources(
         Number(year)
       );
       return res.status(200).send(resData);

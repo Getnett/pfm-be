@@ -2,7 +2,7 @@ import dbPool from "../../../db_pool";
 import toCamelCase from "../../../utils/to-camel-case";
 
 export default class ExpenseAnalytics {
-  static async getMontlyAnalytics(month: number, year: number) {
+  static async getMonthlyAnalytics(month: number, year: number) {
     const { rows } = await dbPool.query(
       `
     SELECT SUM(amount) AS total,category_name,ROUND(SUM(amount)::numeric/(SELECT SUM(amount) FROM expenses) * 100,2) AS percentage
@@ -18,7 +18,7 @@ export default class ExpenseAnalytics {
     return toCamelCase(rows);
   }
 
-  static async getMontlyDailySpend(month: number, year: number) {
+  static async getMonthlyDailySpend(month: number, year: number) {
     const { rows } = await dbPool.query(
       `
       SELECT amount,TO_CHAR(date,'DD mon') AS date FROM expenses WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2
@@ -44,7 +44,7 @@ export default class ExpenseAnalytics {
     return toCamelCase(rows);
   }
 
-  static async getYearlyMontlySpend(year: number) {
+  static async getYearlyMonthlySpend(year: number) {
     const { rows } = await dbPool.query(
       `SELECT SUM(amount) AS total,TO_CHAR(date,'DD mon') AS month FROM expenses GROUP BY month`
     );

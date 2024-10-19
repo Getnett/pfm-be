@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_pool_1 = __importDefault(require("../../../db_pool"));
 const to_camel_case_1 = __importDefault(require("../../../utils/to-camel-case"));
 class ExpenseAnalytics {
-    static getMontlyAnalytics(month, year) {
+    static getMonthlyAnalytics(month, year) {
         return __awaiter(this, void 0, void 0, function* () {
             const { rows } = yield db_pool_1.default.query(`
     SELECT SUM(amount) AS total,category_name,ROUND(SUM(amount)::numeric/(SELECT SUM(amount) FROM expenses) * 100,2) AS percentage
@@ -28,7 +28,7 @@ class ExpenseAnalytics {
             return (0, to_camel_case_1.default)(rows);
         });
     }
-    static getMontlyDailySpend(month, year) {
+    static getMonthlyDailySpend(month, year) {
         return __awaiter(this, void 0, void 0, function* () {
             const { rows } = yield db_pool_1.default.query(`
       SELECT amount,TO_CHAR(date,'DD mon') AS date FROM expenses WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2
@@ -48,7 +48,7 @@ class ExpenseAnalytics {
             return (0, to_camel_case_1.default)(rows);
         });
     }
-    static getYearlyMontlySpend(year) {
+    static getYearlyMonthlySpend(year) {
         return __awaiter(this, void 0, void 0, function* () {
             const { rows } = yield db_pool_1.default.query(`SELECT SUM(amount) AS total,TO_CHAR(date,'DD mon') AS month FROM expenses GROUP BY month`);
             return (0, to_camel_case_1.default)(rows);

@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const analytics_1 = __importDefault(require("../../repos/analytics/expenses/analytics"));
+const analytics_1 = __importDefault(require("../../repos/analytics/incomes/analytics"));
 const router = express_1.default.Router();
-router.get("/api/analytics/expenses/monthly_data", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/api/analytics/incomes/monthly_data", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { month, year } = req.query;
     try {
         const resData = yield analytics_1.default.getMonthlyAnalytics(Number(month), Number(year));
@@ -25,17 +25,17 @@ router.get("/api/analytics/expenses/monthly_data", (req, res, next) => __awaiter
         next(error);
     }
 }));
-router.get("/api/analytics/expenses/monthly_daily_spend", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/api/analytics/incomes/monthly_daily_sources", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { month, year } = req.query;
     try {
-        const resData = yield analytics_1.default.getMonthlyDailySpend(Number(month), Number(year));
+        const resData = yield analytics_1.default.getMonthlyDailySourceIncomes(Number(month), Number(year));
         return res.status(200).send(resData);
     }
     catch (error) {
         next(error);
     }
 }));
-router.get("/api/analytics/expenses/yearly_data", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/api/analytics/incomes/yearly_data", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { year } = req.query;
         const resData = yield analytics_1.default.getYearlyAnalytics(Number(year));
@@ -45,10 +45,10 @@ router.get("/api/analytics/expenses/yearly_data", (req, res, next) => __awaiter(
         next(error);
     }
 }));
-router.get("/api/analytics/expenses/yearly_monthly_spend", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/api/analytics/incomes/yearly_monthly_sources", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { year } = req.query;
     try {
-        const resData = yield analytics_1.default.getYearlyMonthlySpend(Number(year));
+        const resData = yield analytics_1.default.getYearlyMontlyIncomeSources(Number(year));
         return res.status(200).send(resData);
     }
     catch (error) {

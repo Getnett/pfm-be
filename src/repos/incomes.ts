@@ -9,10 +9,9 @@ export default class IncomesRepo {
   }
 
   static async getIncome(id: string) {
-    const { rows } = await dbPool.query(
-      "SELECT * FROM expenses WHERE id = $1",
-      [id]
-    );
+    const { rows } = await dbPool.query("SELECT * FROM incomes WHERE id = $1", [
+      id,
+    ]);
     return toCamelCase(rows)[0];
   }
 
