@@ -44,5 +44,10 @@ export default class ExpenseAnalytics {
     return toCamelCase(rows);
   }
 
-  static async getYearlyMontlySpend() {}
+  static async getYearlyMontlySpend(year: number) {
+    const { rows } = await dbPool.query(
+      `SELECT SUM(amount) AS total,TO_CHAR(date,'DD mon') AS month FROM expenses GROUP BY month`
+    );
+    return toCamelCase(rows);
+  }
 }

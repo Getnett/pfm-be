@@ -44,4 +44,17 @@ router.get("/api/analytics/expenses/yearly_data", async (req, res, next) => {
   }
 });
 
+router.get(
+  "/api/analytics/expenses/yearly_monthly_spend",
+  async (req, res, next) => {
+    const { year } = req.query;
+    try {
+      const resData = await ExpenseAnalytics.getYearlyMontlySpend(Number(year));
+      return res.status(200).send(resData);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default router;

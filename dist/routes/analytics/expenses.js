@@ -45,4 +45,14 @@ router.get("/api/analytics/expenses/yearly_data", (req, res, next) => __awaiter(
         next(error);
     }
 }));
+router.get("/api/analytics/expenses/yearly_monthly_spend", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { year } = req.query;
+    try {
+        const resData = yield analytics_1.default.getYearlyMontlySpend(Number(year));
+        return res.status(200).send(resData);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = router;
