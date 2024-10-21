@@ -30,5 +30,6 @@ db_pool_1.default
 })
     .catch((error) => {
     console.log(" ❌ Connection to database failed!");
+    console.log("process.env.DATABASE_URL", process.env.DATABASE_URL);
     console.error(error);
 });
