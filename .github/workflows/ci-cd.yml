@@ -58,6 +58,14 @@ jobs:
             npm install
             pm2 restart pfm-be
 
+            # Set the DATABASE_URL environment variable and save it
+            echo 'export DATABASE_URL="${{secrets.DATABASE_URL}}"' >> ~/.bashrc
+            echo '${{secrets.DATABASE_URL}}'
+            # Source the .bashrc to load the new environment variable
+            source ~/.bashrc
+
+            npm run migrate up
+
       - name: Remove Github Actions IP from security group
         run: |
           aws ec2 revoke-security-group-ingress --group-name ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
