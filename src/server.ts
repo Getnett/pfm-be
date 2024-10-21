@@ -14,7 +14,7 @@ serverInstance.get("/", (_req, res) => {
            <title>Personal finance managment project</title>
          </head>
          <body>
-          <h1>Personal finance managment app updated!</h1>
+          <h1>Personal finance managment app updated! check</h1>
          </body>
     </html>`);
 });
