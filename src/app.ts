@@ -1,6 +1,7 @@
 import express from "express";
 import expensesRoute from "./routes/expenses";
 import incomesRoute from "./routes/incomes";
+import budgetsRoute from "./routes/budgets";
 import expenseAnalyticsRoute from "./routes/analytics/expenses";
 import incomeAnalyticsRoute from "./routes/analytics/incomes";
 
@@ -16,6 +17,8 @@ export default () => {
   app.use(expenseAnalyticsRoute);
 
   app.use(incomeAnalyticsRoute);
+
+  app.use(budgetsRoute);
 
   return app;
 };
