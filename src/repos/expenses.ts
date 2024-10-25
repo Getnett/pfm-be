@@ -45,7 +45,7 @@ export default class ExpensesRepo {
     let query = "UPDATE expenses SET";
 
     const fieldsToUpdate: string[] = [];
-    const values = [];
+    const values: any[] = [];
 
     Object.keys(reqBody).forEach((key, index) => {
       const snakeCase = key.replace(/[A-Z]/g, ($1) =>
