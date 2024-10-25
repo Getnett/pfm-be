@@ -52,4 +52,47 @@ export default class FinancialGoalRepo {
     );
     return toCamelCase(rows)[0];
   }
+
+  // create goal_contributions
+  static async createFinancialGoalContrubutions(payload: any) {
+    const { amount, financialGoalId } = payload;
+    const { rows } = await dbPool.query(
+      ` INSERT INTO  goal_contributions (amount,goal_id,user_id)
+        VALUES ($1,$2,$3) RETURNING *;
+      `,
+      [amount, financialGoalId, 1]
+    );
+    return toCamelCase(rows)[0];
+  }
+
+  static async getAllContributionsForFinancialGoalContribution(
+    financialGoalId: number
+  ) {
+    const { rows } = await dbPool.query(
+      ` SELECT * FROM goal_contributions WHERE goal_id = $1;`,
+      [financialGoalId]
+    );
+    return toCamelCase(rows);
+  }
+
+  static async updateFinancialGoalContribution(
+    contributionGoalId: string,
+    payload: any
+  ) {
+    const { amount } = payload;
+    const { rows } = await dbPool.query(
+      `UPDATE goal_contributions SET amount = $1 WHERE id = $2 RETURNING *; `,
+      [amount, contributionGoalId]
+    );
+    return toCamelCase(rows)[0];
+  }
+
+  static async deleteFinancialGoalContribution(contributionGoalId: string) {
+    const { rows } = await dbPool.query(
+      `DELETE FROM goal_contributions WHERE id = $1 RETURNING *; `,
+      [contributionGoalId]
+    );
+
+    return toCamelCase(rows)[0];
+  }
 }

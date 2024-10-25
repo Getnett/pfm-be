@@ -56,5 +56,34 @@ class FinancialGoalRepo {
             return (0, to_camel_case_1.default)(rows)[0];
         });
     }
+    // create goal_contributions
+    static createFinancialGoalContrubutions(payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { amount, financialGoalId } = payload;
+            const { rows } = yield db_pool_1.default.query(` INSERT INTO  goal_contributions (amount,goal_id,user_id)
+        VALUES ($1,$2,$3) RETURNING *;
+      `, [amount, financialGoalId, 1]);
+            return (0, to_camel_case_1.default)(rows)[0];
+        });
+    }
+    static getAllContributionsForFinancialGoalContribution(financialGoalId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rows } = yield db_pool_1.default.query(` SELECT * FROM goal_contributions WHERE goal_id = $1;`, [financialGoalId]);
+            return (0, to_camel_case_1.default)(rows);
+        });
+    }
+    static updateFinancialGoalContribution(contributionGoalId, payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { amount } = payload;
+            const { rows } = yield db_pool_1.default.query(`UPDATE goal_contributions SET amount = $1 WHERE id = $2 RETURNING *; `, [amount, contributionGoalId]);
+            return (0, to_camel_case_1.default)(rows)[0];
+        });
+    }
+    static deleteFinancialGoalContribution(contributionGoalId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rows } = yield db_pool_1.default.query(`DELETE FROM goal_contributions WHERE id = $1 RETURNING *; `, [contributionGoalId]);
+            return (0, to_camel_case_1.default)(rows)[0];
+        });
+    }
 }
 exports.default = FinancialGoalRepo;

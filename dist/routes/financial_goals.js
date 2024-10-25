@@ -56,4 +56,46 @@ router.delete("/api/financial_goals/:financialGoalId", (req, res, next) => __awa
         next(error);
     }
 }));
+// Financial goal contributions
+router.post("/api/financial_goals/contributions", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    try {
+        const resData = yield financial_goals_1.default.createFinancialGoalContrubutions(payload);
+        return res.status(201).send(resData);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.get("/api/financial_goals/contributions/:financialGoalId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { financialGoalId } = req.params;
+    try {
+        const resData = yield financial_goals_1.default.getAllContributionsForFinancialGoalContribution(Number(financialGoalId));
+        return res.status(200).send(resData);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.patch("/api/financial_goals/contributions/:goalContributionId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { goalContributionId } = req.params;
+    const payload = req.body;
+    try {
+        const resData = yield financial_goals_1.default.updateFinancialGoalContribution(goalContributionId, payload);
+        return res.status(200).send(resData);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.delete("/api/financial_goals/contributions/:goalContributionId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { goalContributionId } = req.params;
+    try {
+        const resData = yield financial_goals_1.default.deleteFinancialGoalContribution(goalContributionId);
+        return res.status(200).send("Deleted successfully!");
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = router;
