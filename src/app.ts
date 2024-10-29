@@ -5,6 +5,7 @@ import budgetsRoute from "./routes/budgets";
 import expenseAnalyticsRoute from "./routes/analytics/expenses";
 import incomeAnalyticsRoute from "./routes/analytics/incomes";
 import financialGoalsRoute from "./routes/financial_goals";
+import accountsRoute from "./routes/accounts";
 
 export default () => {
   const app = express();
@@ -22,6 +23,8 @@ export default () => {
   app.use(budgetsRoute);
 
   app.use(financialGoalsRoute);
+
+  app.use(accountsRoute);
 
   return app;
 };
