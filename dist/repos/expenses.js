@@ -32,15 +32,17 @@ class ExpensesRepo {
             const { amount, date, note, categoryId, accountId } = reqBody;
             let rowsData = [];
             if (date) {
-                const { rows } = yield db_pool_1.default.query(`
-      INSERT INTO expenses  (amount,date,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;
-      `, [amount, date, note, 1, categoryId, accountId]);
+                yield db_pool_1.default.query("BEGIN;");
+                yield db_pool_1.default.query(` UPDATE accounts SET balance = balance - $1 WHERE id = $2;`, [amount, accountId || 1]);
+                const { rows } = yield db_pool_1.default.query(`INSERT INTO expenses  (amount,date,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;`, [amount, date, note, 1, categoryId, accountId || 1]);
+                yield db_pool_1.default.query("COMMIT;");
                 rowsData = rows;
             }
             else {
-                const { rows } = yield db_pool_1.default.query(`
-      INSERT INTO expenses  (amount,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5) RETURNING *;
-      `, [amount, note, 1, categoryId, accountId]);
+                yield db_pool_1.default.query("BEGIN;");
+                yield db_pool_1.default.query(` UPDATE accounts SET balance = balance - $1 WHERE id = $2;`, [amount, accountId || 1]);
+                const { rows } = yield db_pool_1.default.query(` INSERT INTO expenses  (amount,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5) RETURNING *;`, [amount, note, 1, categoryId, accountId || 1]);
+                yield db_pool_1.default.query("COMMIT;");
                 rowsData = rows;
             }
             return (0, to_camel_case_1.default)(rowsData)[0];
@@ -69,7 +71,10 @@ class ExpensesRepo {
     }
     static deleteExpense(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield db_pool_1.default.query("BEGIN;");
+            yield db_pool_1.default.query(`UPDATE accounts SET balance = balance + ( SELECT amount FROM expenses WHERE id = $1 ) WHERE id = (SELECT account_id FROM expenses WHERE id = $1); `, [id]);
             const { rows } = yield db_pool_1.default.query("DELETE FROM expenses WHERE id = $1 RETURNING *;", [id]);
+            yield db_pool_1.default.query("COMMIT;");
             return (0, to_camel_case_1.default)(rows)[0];
         });
     }

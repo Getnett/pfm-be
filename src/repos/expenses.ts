@@ -21,20 +21,28 @@ export default class ExpensesRepo {
     let rowsData = [];
 
     if (date) {
-      const { rows } = await dbpool.query(
-        `
-      INSERT INTO expenses  (amount,date,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;
-      `,
-        [amount, date, note, 1, categoryId, accountId]
+      await dbpool.query("BEGIN;");
+      await dbpool.query(
+        ` UPDATE accounts SET balance = balance - $1 WHERE id = $2;`,
+        [amount, accountId || 1]
       );
+      const { rows } = await dbpool.query(
+        `INSERT INTO expenses  (amount,date,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;`,
+        [amount, date, note, 1, categoryId, accountId || 1]
+      );
+      await dbpool.query("COMMIT;");
       rowsData = rows;
     } else {
-      const { rows } = await dbpool.query(
-        `
-      INSERT INTO expenses  (amount,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5) RETURNING *;
-      `,
-        [amount, note, 1, categoryId, accountId]
+      await dbpool.query("BEGIN;");
+      await dbpool.query(
+        ` UPDATE accounts SET balance = balance - $1 WHERE id = $2;`,
+        [amount, accountId || 1]
       );
+      const { rows } = await dbpool.query(
+        ` INSERT INTO expenses  (amount,note,user_id,category_id,account_id)  VALUES ($1,$2,$3,$4,$5) RETURNING *;`,
+        [amount, note, 1, categoryId, accountId || 1]
+      );
+      await dbpool.query("COMMIT;");
       rowsData = rows;
     }
 
@@ -67,10 +75,16 @@ export default class ExpensesRepo {
   }
 
   static async deleteExpense(id: string) {
+    await dbpool.query("BEGIN;");
+    await dbpool.query(
+      `UPDATE accounts SET balance = balance + ( SELECT amount FROM expenses WHERE id = $1 ) WHERE id = (SELECT account_id FROM expenses WHERE id = $1); `,
+      [id]
+    );
     const { rows } = await dbpool.query(
       "DELETE FROM expenses WHERE id = $1 RETURNING *;",
       [id]
     );
+    await dbpool.query("COMMIT;");
     return toCamelCase(rows)[0];
   }
 }
