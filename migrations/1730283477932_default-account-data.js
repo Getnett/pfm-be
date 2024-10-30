@@ -10,7 +10,7 @@ exports.shorthands = undefined;
  */
 exports.up = (pgm) => {
   pgm.sql(`INSERT INTO accounts (account_name,balance,note,user_id,account_type)
-  VALUES("default",0,"default account",1,1)`);
+  VALUES('default',0,'default account',1,1)`);
 };
 
 /**
