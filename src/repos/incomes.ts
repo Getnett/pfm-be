@@ -21,6 +21,11 @@ export default class IncomesRepo {
     let rowsData = [];
     // check if there is a better way
     if (date) {
+      await dbPool.query("BEGIN;");
+      await dbPool.query(
+        `UPDATE accounts SET balance = balance + $1 WHERE id = $2`,
+        [amount, accountId || 1]
+      );
       const { rows } = await dbPool.query(
         `INSERT INTO incomes (amount,note,date,user_id,income_sources_id,account_id) 
          VALUES 
@@ -29,16 +34,24 @@ export default class IncomesRepo {
         `,
         [amount, note, date, 1, incomeSourcesId, accountId]
       );
+      await dbPool.query("COMMIT;");
+
       rowsData = rows;
     } else {
+      await dbPool.query("BEGIN;");
+      await dbPool.query(
+        `UPDATE accounts SET balance = balance + $1 WHERE id = $2`,
+        [amount, accountId || 1]
+      );
       const { rows } = await dbPool.query(
         `INSERT INTO incomes (amount,note,user_id,income_sources_id,account_id) 
          VALUES 
          ($1,$2,$3,$4,$5)
          RETURNING *;
         `,
-        [amount, note, 1, incomeSourcesId, accountId]
+        [amount, note, 1, incomeSourcesId, accountId || 1]
       );
+      await dbPool.query("COMMIT;");
       rowsData = rows;
     }
 
@@ -72,10 +85,23 @@ export default class IncomesRepo {
   }
 
   static async deleteIncome(id: string) {
+    const row = await dbPool.query(
+      `SELECT account_id FROM incomes WHERE id = $1`,
+      [id]
+    );
+    console.log({ row });
+    await dbPool.query("BEGIN;");
+
+    console.log();
+    await dbPool.query(
+      `UPDATE accounts SET balance = balance - (SELECT amount FROM incomes WHERE id = $1) WHERE id = (SELECT account_id FROM incomes WHERE id = $1);`,
+      [id]
+    );
     const { rows } = await dbPool.query(
       "DELETE FROM  incomes WHERE id = $1 RETURNING *",
       [id]
     );
+    await dbPool.query("COMMIT;");
     return toCamelCase(rows)[0];
   }
 }
