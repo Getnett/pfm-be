@@ -85,11 +85,6 @@ export default class IncomesRepo {
   }
 
   static async deleteIncome(id: string) {
-    const row = await dbPool.query(
-      `SELECT account_id FROM incomes WHERE id = $1`,
-      [id]
-    );
-    console.log({ row });
     await dbPool.query("BEGIN;");
 
     console.log();

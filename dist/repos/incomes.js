@@ -81,8 +81,6 @@ class IncomesRepo {
     }
     static deleteIncome(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const row = yield db_pool_1.default.query(`SELECT account_id FROM incomes WHERE id = $1`, [id]);
-            console.log({ row });
             yield db_pool_1.default.query("BEGIN;");
             console.log();
             yield db_pool_1.default.query(`UPDATE accounts SET balance = balance - (SELECT amount FROM incomes WHERE id = $1) WHERE id = (SELECT account_id FROM incomes WHERE id = $1);`, [id]);
