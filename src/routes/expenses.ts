@@ -35,14 +35,14 @@ router.post("/api/expenses", async (req, res, next) => {
 router.delete("/api/expenses/:expenseId", async (req, res, next) => {
   const { expenseId } = req.params;
   try {
-    const resData = await ExpensesRepo.deleteExpense(expenseId);
-    console.log(resData);
+    await ExpensesRepo.deleteExpense(expenseId);
+
     return res.status(200).send("Expense deleted successfully");
   } catch (error) {
     next(error);
   }
 });
-router.patch("/api/expenses/:expenseId", async (req, res, next) => {
+router.put("/api/expenses/:expenseId", async (req, res, next) => {
   const { expenseId } = req.params;
   const body = req.body;
   try {

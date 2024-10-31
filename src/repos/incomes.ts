@@ -59,35 +59,25 @@ export default class IncomesRepo {
   }
 
   static async updateIncome(id: string, reqBody: any) {
-    let query = "UPDATE incomes SET";
-    const fieldsToUpdate: string[] = [];
-    const values: any[] = [];
+    const { amount, note, date, incomeSourcesId, accountId } = reqBody;
+    await dbPool.query("BEGIN;");
+    await dbPool.query(
+      `UPDATE accounts SET balance = balance + ($2 - (SELECT amount FROM incomes WHERE id = $1)) WHERE id = (SELECT account_id FROM incomes WHERE id = $1);`,
+      [id, amount]
+    );
+    const { rows } = await dbPool.query(
+      `UPDATE incomes SET amount = $1 , note = $2 , date = $3 ,income_sources_id = $4, account_id = $5 WHERE id = $6 RETURNING *;`,
+      [amount, note, date, incomeSourcesId, accountId, id]
+    );
 
-    Object.keys(reqBody).forEach((key, index) => {
-      const snakeCasedField = key.replace(/[A-Z]/g, ($1) =>
-        $1.toLowerCase().replace("", "_")
-      );
+    await dbPool.query(`COMMIT;`);
 
-      fieldsToUpdate.push(`${snakeCasedField} = $${index + 1}`);
-      values.push(reqBody[key]);
-    });
-
-    values.push(id);
-
-    query =
-      query +
-      " " +
-      fieldsToUpdate.join(", ") +
-      ` WHERE id = $${fieldsToUpdate.length + 1} RETURNING *;`;
-
-    const { rows } = await dbPool.query(query, values);
     return toCamelCase(rows)[0];
   }
 
   static async deleteIncome(id: string) {
     await dbPool.query("BEGIN;");
 
-    console.log();
     await dbPool.query(
       `UPDATE accounts SET balance = balance - (SELECT amount FROM incomes WHERE id = $1) WHERE id = (SELECT account_id FROM incomes WHERE id = $1);`,
       [id]

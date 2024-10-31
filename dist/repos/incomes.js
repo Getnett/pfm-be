@@ -61,28 +61,17 @@ class IncomesRepo {
     }
     static updateIncome(id, reqBody) {
         return __awaiter(this, void 0, void 0, function* () {
-            let query = "UPDATE incomes SET";
-            const fieldsToUpdate = [];
-            const values = [];
-            Object.keys(reqBody).forEach((key, index) => {
-                const snakeCasedField = key.replace(/[A-Z]/g, ($1) => $1.toLowerCase().replace("", "_"));
-                fieldsToUpdate.push(`${snakeCasedField} = $${index + 1}`);
-                values.push(reqBody[key]);
-            });
-            values.push(id);
-            query =
-                query +
-                    " " +
-                    fieldsToUpdate.join(", ") +
-                    ` WHERE id = $${fieldsToUpdate.length + 1} RETURNING *;`;
-            const { rows } = yield db_pool_1.default.query(query, values);
+            const { amount, note, date, incomeSourcesId, accountId } = reqBody;
+            yield db_pool_1.default.query("BEGIN;");
+            yield db_pool_1.default.query(`UPDATE accounts SET balance = balance + ($2 - (SELECT amount FROM incomes WHERE id = $1)) WHERE id = (SELECT account_id FROM incomes WHERE id = $1);`, [id, amount]);
+            const { rows } = yield db_pool_1.default.query(`UPDATE incomes SET amount = $1 , note = $2 , date = $3 ,income_sources_id = $4, account_id = $5 WHERE id = $6 RETURNING *;`, [amount, note, date, incomeSourcesId, accountId, id]);
+            yield db_pool_1.default.query(`COMMIT;`);
             return (0, to_camel_case_1.default)(rows)[0];
         });
     }
     static deleteIncome(id) {
         return __awaiter(this, void 0, void 0, function* () {
             yield db_pool_1.default.query("BEGIN;");
-            console.log();
             yield db_pool_1.default.query(`UPDATE accounts SET balance = balance - (SELECT amount FROM incomes WHERE id = $1) WHERE id = (SELECT account_id FROM incomes WHERE id = $1);`, [id]);
             const { rows } = yield db_pool_1.default.query("DELETE FROM  incomes WHERE id = $1 RETURNING *", [id]);
             yield db_pool_1.default.query("COMMIT;");

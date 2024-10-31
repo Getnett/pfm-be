@@ -51,22 +51,32 @@ class ExpensesRepo {
     // reqBody change type
     static updateExpense(id, reqBody) {
         return __awaiter(this, void 0, void 0, function* () {
-            let query = "UPDATE expenses SET";
-            const fieldsToUpdate = [];
-            const values = [];
-            Object.keys(reqBody).forEach((key, index) => {
-                const snakeCase = key.replace(/[A-Z]/g, ($1) => $1.toLowerCase().replace("", "_"));
-                fieldsToUpdate.push(`${snakeCase} = $${index + 1}`);
-                values.push(reqBody[key]);
-            });
-            query =
-                query +
-                    " " +
-                    fieldsToUpdate.join(", ") +
-                    ` WHERE id = $${fieldsToUpdate.length + 1} RETURNING *;`;
-            values.push(id);
-            const { rows } = yield db_pool_1.default.query(query.toString(), values);
+            const { amount, date, note, categoryId, accountId } = reqBody;
+            yield db_pool_1.default.query("BEGIN;");
+            yield db_pool_1.default.query(`UPDATE accounts SET balance = balance - ($2 - (SELECT amount FROM expenses WHERE id = $1)) WHERE id = (SELECT account_id FROM expenses WHERE id = $1)`, [id, amount]);
+            const { rows } = yield db_pool_1.default.query(`
+       UPDATE expenses SET  amount = $1 , date = $2 , note = $3 , category_id = $4 , account_id = $5   WHERE  id = $6 RETURNING *;
+     `, [amount, date, note, categoryId, accountId, id]);
+            yield db_pool_1.default.query(`COMMIT;`);
             return (0, to_camel_case_1.default)(rows)[0];
+            // let query = "UPDATE expenses SET";
+            // const fieldsToUpdate: string[] = [];
+            // const values: any[] = [];
+            // Object.keys(reqBody).forEach((key, index) => {
+            //   const snakeCase = key.replace(/[A-Z]/g, ($1) =>
+            //     $1.toLowerCase().replace("", "_")
+            //   );
+            //   fieldsToUpdate.push(`${snakeCase} = $${index + 1}`);
+            //   values.push(reqBody[key]);
+            // });
+            // query =
+            //   query +
+            //   " " +
+            //   fieldsToUpdate.join(", ") +
+            //   ` WHERE id = $${fieldsToUpdate.length + 1} RETURNING *;`;
+            // values.push(id);
+            // const { rows } = await dbpool.query(query.toString(), values);
+            // return toCamelCase(rows)[0];
         });
     }
     static deleteExpense(id) {

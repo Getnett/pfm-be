@@ -32,7 +32,7 @@ router.post("/api/incomes", async (req, res, next) => {
   }
 });
 
-router.patch("/api/incomes/:incomeId", async (req, res, next) => {
+router.put("/api/incomes/:incomeId", async (req, res, next) => {
   const { incomeId } = req.params;
   const body = req.body;
   try {
@@ -45,8 +45,7 @@ router.patch("/api/incomes/:incomeId", async (req, res, next) => {
 
 router.delete("/api/incomes/:incomeId", async (req, res) => {
   const { incomeId } = req.params;
-  const resData = await IncomesRepo.deleteIncome(incomeId);
-  console.log(resData);
+  await IncomesRepo.deleteIncome(incomeId);
   return res.status(200).send("Income deleted successfully");
 });
 

@@ -50,28 +50,44 @@ export default class ExpensesRepo {
   }
   // reqBody change type
   static async updateExpense(id: string, reqBody: any) {
-    let query = "UPDATE expenses SET";
+    const { amount, date, note, categoryId, accountId } = reqBody;
 
-    const fieldsToUpdate: string[] = [];
-    const values: any[] = [];
+    await dbpool.query("BEGIN;");
 
-    Object.keys(reqBody).forEach((key, index) => {
-      const snakeCase = key.replace(/[A-Z]/g, ($1) =>
-        $1.toLowerCase().replace("", "_")
-      );
-      fieldsToUpdate.push(`${snakeCase} = $${index + 1}`);
-      values.push(reqBody[key]);
-    });
+    await dbpool.query(
+      `UPDATE accounts SET balance = balance - ($2 - (SELECT amount FROM expenses WHERE id = $1)) WHERE id = (SELECT account_id FROM expenses WHERE id = $1)`,
+      [id, amount]
+    );
 
-    query =
-      query +
-      " " +
-      fieldsToUpdate.join(", ") +
-      ` WHERE id = $${fieldsToUpdate.length + 1} RETURNING *;`;
+    const { rows } = await dbpool.query(
+      `
+       UPDATE expenses SET  amount = $1 , date = $2 , note = $3 , category_id = $4 , account_id = $5   WHERE  id = $6 RETURNING *;
+     `,
+      [amount, date, note, categoryId, accountId, id]
+    );
 
-    values.push(id);
-    const { rows } = await dbpool.query(query.toString(), values);
+    await dbpool.query(`COMMIT;`);
+
     return toCamelCase(rows)[0];
+
+    // let query = "UPDATE expenses SET";
+    // const fieldsToUpdate: string[] = [];
+    // const values: any[] = [];
+    // Object.keys(reqBody).forEach((key, index) => {
+    //   const snakeCase = key.replace(/[A-Z]/g, ($1) =>
+    //     $1.toLowerCase().replace("", "_")
+    //   );
+    //   fieldsToUpdate.push(`${snakeCase} = $${index + 1}`);
+    //   values.push(reqBody[key]);
+    // });
+    // query =
+    //   query +
+    //   " " +
+    //   fieldsToUpdate.join(", ") +
+    //   ` WHERE id = $${fieldsToUpdate.length + 1} RETURNING *;`;
+    // values.push(id);
+    // const { rows } = await dbpool.query(query.toString(), values);
+    // return toCamelCase(rows)[0];
   }
 
   static async deleteExpense(id: string) {

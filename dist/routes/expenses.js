@@ -47,15 +47,14 @@ router.post("/api/expenses", (req, res, next) => __awaiter(void 0, void 0, void 
 router.delete("/api/expenses/:expenseId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { expenseId } = req.params;
     try {
-        const resData = yield expenses_1.default.deleteExpense(expenseId);
-        console.log(resData);
+        yield expenses_1.default.deleteExpense(expenseId);
         return res.status(200).send("Expense deleted successfully");
     }
     catch (error) {
         next(error);
     }
 }));
-router.patch("/api/expenses/:expenseId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/api/expenses/:expenseId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { expenseId } = req.params;
     const body = req.body;
     try {

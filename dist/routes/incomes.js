@@ -44,7 +44,7 @@ router.post("/api/incomes", (req, res, next) => __awaiter(void 0, void 0, void 0
         next(error);
     }
 }));
-router.patch("/api/incomes/:incomeId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/api/incomes/:incomeId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { incomeId } = req.params;
     const body = req.body;
     try {
@@ -57,8 +57,7 @@ router.patch("/api/incomes/:incomeId", (req, res, next) => __awaiter(void 0, voi
 }));
 router.delete("/api/incomes/:incomeId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { incomeId } = req.params;
-    const resData = yield incomes_1.default.deleteIncome(incomeId);
-    console.log(resData);
+    yield incomes_1.default.deleteIncome(incomeId);
     return res.status(200).send("Income deleted successfully");
 }));
 exports.default = router;
