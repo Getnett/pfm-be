@@ -14,55 +14,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const expenses_1 = __importDefault(require("../repos/expenses"));
+const async_error_handler_1 = __importDefault(require("../middleware/async-error-handler"));
 const router = express_1.default.Router();
-router.get("/api/expenses", (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const resData = yield expenses_1.default.getAllExpenses();
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.get("/api/expenses/:expenseId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/api/expenses", (0, async_error_handler_1.default)((_req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield expenses_1.default.getAllExpenses();
+    res.status(200).send(resData);
+})));
+router.get("/api/expenses/:expenseId", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { expenseId } = req.params;
-    try {
-        const resData = yield expenses_1.default.getExpense(expenseId);
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.post("/api/expenses", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield expenses_1.default.getExpense(expenseId);
+    res.status(200).send(resData);
+})));
+router.post("/api/expenses", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
-    try {
-        const resData = yield expenses_1.default.createExpense(body);
-        return res.status(201).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.delete("/api/expenses/:expenseId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield expenses_1.default.createExpense(body);
+    res.status(201).send(resData);
+})));
+router.delete("/api/expenses/:expenseId", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { expenseId } = req.params;
-    try {
-        yield expenses_1.default.deleteExpense(expenseId);
-        return res.status(200).send("Expense deleted successfully");
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.put("/api/expenses/:expenseId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    yield expenses_1.default.deleteExpense(expenseId);
+    res.status(200).send("Expense deleted successfully");
+})));
+router.put("/api/expenses/:expenseId", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { expenseId } = req.params;
     const body = req.body;
-    try {
-        const resData = yield expenses_1.default.updateExpense(expenseId, body);
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
+    const resData = yield expenses_1.default.updateExpense(expenseId, body);
+    res.status(200).send(resData);
+})));
 exports.default = router;

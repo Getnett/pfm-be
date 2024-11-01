@@ -14,50 +14,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const incomes_1 = __importDefault(require("../repos/incomes"));
+const async_error_handler_1 = __importDefault(require("../middleware/async-error-handler"));
 const router = express_1.default.Router();
-router.get("/api/incomes", (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const resData = yield incomes_1.default.getAllIncomes();
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.get("/api/incomes/:incomeId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/api/incomes", (0, async_error_handler_1.default)((_req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield incomes_1.default.getAllIncomes();
+    res.status(200).send(resData);
+})));
+router.get("/api/incomes/:incomeId", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { incomeId } = req.params;
-    try {
-        const resData = yield incomes_1.default.getIncome(incomeId);
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.post("/api/incomes", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield incomes_1.default.getIncome(incomeId);
+    res.status(200).send(resData);
+})));
+router.post("/api/incomes", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
-    try {
-        const resData = yield incomes_1.default.createIncome(body);
-        return res.status(201).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.put("/api/incomes/:incomeId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield incomes_1.default.createIncome(body);
+    res.status(201).send(resData);
+})));
+router.put("/api/incomes/:incomeId", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { incomeId } = req.params;
     const body = req.body;
-    try {
-        const resData = yield incomes_1.default.updateIncome(incomeId, body);
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.delete("/api/incomes/:incomeId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield incomes_1.default.updateIncome(incomeId, body);
+    res.status(200).send(resData);
+})));
+router.delete("/api/incomes/:incomeId", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { incomeId } = req.params;
     yield incomes_1.default.deleteIncome(incomeId);
     return res.status(200).send("Income deleted successfully");
-}));
+})));
 exports.default = router;

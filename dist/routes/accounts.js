@@ -14,45 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const accounts_1 = __importDefault(require("../repos/accounts"));
+const async_error_handler_1 = __importDefault(require("../middleware/async-error-handler"));
 const router = express_1.default.Router();
-router.get("/api/accounts", (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const resData = yield accounts_1.default.getAllAccounts();
-        res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.post("/api/accounts", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/api/accounts", (0, async_error_handler_1.default)((_req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield accounts_1.default.getAllAccounts();
+    res.status(200).send(resData);
+})));
+router.post("/api/accounts", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
-    try {
-        const resData = yield accounts_1.default.createAccount(payload);
-        res.status(201).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.put("/api/accounts/:accountId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield accounts_1.default.createAccount(payload);
+    res.status(201).send(resData);
+})));
+router.put("/api/accounts/:accountId", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { accountId } = req.params;
     const payload = req.body;
-    try {
-        const resData = yield accounts_1.default.updateAccount(accountId, payload);
-        res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.delete("/api/accounts/:accountId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield accounts_1.default.updateAccount(accountId, payload);
+    res.status(200).send(resData);
+})));
+router.delete("/api/accounts/:accountId", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { accountId } = req.params;
-    try {
-        yield accounts_1.default.deleteAccount(accountId);
-        res.status(200).send("Deleted successfully!");
-    }
-    catch (error) {
-        next(error);
-    }
-}));
+    yield accounts_1.default.deleteAccount(accountId);
+    res.status(200).send("Deleted successfully!");
+})));
 exports.default = router;

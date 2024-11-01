@@ -6,6 +6,8 @@ import expenseAnalyticsRoute from "./routes/analytics/expenses";
 import incomeAnalyticsRoute from "./routes/analytics/incomes";
 import financialGoalsRoute from "./routes/financial_goals";
 import accountsRoute from "./routes/accounts";
+import notFoundRoute from "./routes/not-found";
+import globalErrorHandler from "./middleware/global-error-handler";
 
 export default () => {
   const app = express();
@@ -25,6 +27,13 @@ export default () => {
   app.use(financialGoalsRoute);
 
   app.use(accountsRoute);
+
+  // before all other routes
+  app.use(notFoundRoute);
+
+  // before all middlewares
+
+  app.use(globalErrorHandler);
 
   return app;
 };

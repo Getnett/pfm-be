@@ -14,45 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const analytics_1 = __importDefault(require("../../repos/analytics/incomes/analytics"));
+const async_error_handler_1 = __importDefault(require("../../middleware/async-error-handler"));
 const router = express_1.default.Router();
-router.get("/api/analytics/incomes/monthly_data", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/api/analytics/incomes/monthly_data", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { month, year } = req.query;
-    try {
-        const resData = yield analytics_1.default.getMonthlyAnalytics(Number(month), Number(year));
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.get("/api/analytics/incomes/monthly_daily_sources", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield analytics_1.default.getMonthlyAnalytics(Number(month), Number(year));
+    res.status(200).send(resData);
+})));
+router.get("/api/analytics/incomes/monthly_daily_sources", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { month, year } = req.query;
-    try {
-        const resData = yield analytics_1.default.getMonthlyDailySourceIncomes(Number(month), Number(year));
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.get("/api/analytics/incomes/yearly_data", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { year } = req.query;
-        const resData = yield analytics_1.default.getYearlyAnalytics(Number(year));
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.get("/api/analytics/incomes/yearly_monthly_sources", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const resData = yield analytics_1.default.getMonthlyDailySourceIncomes(Number(month), Number(year));
+    res.status(200).send(resData);
+})));
+router.get("/api/analytics/incomes/yearly_data", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { year } = req.query;
-    try {
-        const resData = yield analytics_1.default.getYearlyMontlyIncomeSources(Number(year));
-        return res.status(200).send(resData);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
+    const resData = yield analytics_1.default.getYearlyAnalytics(Number(year));
+    res.status(200).send(resData);
+})));
+router.get("/api/analytics/incomes/yearly_monthly_sources", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { year } = req.query;
+    const resData = yield analytics_1.default.getYearlyMontlyIncomeSources(Number(year));
+    res.status(200).send(resData);
+})));
 exports.default = router;

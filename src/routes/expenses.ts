@@ -1,56 +1,61 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import ExpensesRepo from "../repos/expenses";
+import asyncErrorHandler from "../middleware/async-error-handler";
 
 const router = express.Router();
 
-router.get("/api/expenses", async (_req, res, next) => {
-  try {
-    const resData = await ExpensesRepo.getAllExpenses();
-    return res.status(200).send(resData);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get(
+  "/api/expenses",
+  asyncErrorHandler(
+    async (_req: Request, res: Response, _next: NextFunction) => {
+      const resData = await ExpensesRepo.getAllExpenses();
+      res.status(200).send(resData);
+    }
+  )
+);
 
-router.get("/api/expenses/:expenseId", async (req, res, next) => {
-  const { expenseId } = req.params;
-  try {
-    const resData = await ExpensesRepo.getExpense(expenseId);
-    return res.status(200).send(resData);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get(
+  "/api/expenses/:expenseId",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { expenseId } = req.params;
+      const resData = await ExpensesRepo.getExpense(expenseId);
+      res.status(200).send(resData);
+    }
+  )
+);
 
-router.post("/api/expenses", async (req, res, next) => {
-  const body = req.body;
-  try {
-    const resData = await ExpensesRepo.createExpense(body);
-    return res.status(201).send(resData);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post(
+  "/api/expenses",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const body = req.body;
+      const resData = await ExpensesRepo.createExpense(body);
+      res.status(201).send(resData);
+    }
+  )
+);
 
-router.delete("/api/expenses/:expenseId", async (req, res, next) => {
-  const { expenseId } = req.params;
-  try {
-    await ExpensesRepo.deleteExpense(expenseId);
-
-    return res.status(200).send("Expense deleted successfully");
-  } catch (error) {
-    next(error);
-  }
-});
-router.put("/api/expenses/:expenseId", async (req, res, next) => {
-  const { expenseId } = req.params;
-  const body = req.body;
-  try {
-    const resData = await ExpensesRepo.updateExpense(expenseId, body);
-    return res.status(200).send(resData);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete(
+  "/api/expenses/:expenseId",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { expenseId } = req.params;
+      await ExpensesRepo.deleteExpense(expenseId);
+      res.status(200).send("Expense deleted successfully");
+    }
+  )
+);
+router.put(
+  "/api/expenses/:expenseId",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { expenseId } = req.params;
+      const body = req.body;
+      const resData = await ExpensesRepo.updateExpense(expenseId, body);
+      res.status(200).send(resData);
+    }
+  )
+);
 
 export default router;
