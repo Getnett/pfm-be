@@ -14,6 +14,19 @@ export default () => {
 
   app.use(express.json());
 
+  app.get("/", (_req, res) => {
+    // Send a response to the client
+    res.send(`
+     <html>
+           <head>
+             <title>Personal finance managment project</title>
+           </head>
+           <body>
+            <h1>Personal finance managment app updated!</h1>
+           </body>
+      </html>`);
+  });
+
   app.use(expensesRoute);
 
   app.use(incomesRoute);

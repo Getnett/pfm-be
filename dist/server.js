@@ -8,18 +8,6 @@ const app_1 = __importDefault(require("./app"));
 const db_pool_1 = __importDefault(require("./db_pool"));
 const PORT = 3000;
 const serverInstance = (0, app_1.default)();
-serverInstance.get("/", (_req, res) => {
-    // Send a response to the client
-    res.send(`
-   <html>
-         <head>
-           <title>Personal finance managment project</title>
-         </head>
-         <body>
-          <h1>Personal finance managment app updated!</h1>
-         </body>
-    </html>`);
-});
 db_pool_1.default
     .connect(process.env.DATABASE_URL || "")
     .then((_res) => {

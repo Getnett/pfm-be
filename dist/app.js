@@ -16,6 +16,18 @@ const global_error_handler_1 = __importDefault(require("./middleware/global-erro
 exports.default = () => {
     const app = (0, express_1.default)();
     app.use(express_1.default.json());
+    app.get("/", (_req, res) => {
+        // Send a response to the client
+        res.send(`
+     <html>
+           <head>
+             <title>Personal finance managment project</title>
+           </head>
+           <body>
+            <h1>Personal finance managment app updated!</h1>
+           </body>
+      </html>`);
+    });
     app.use(expenses_1.default);
     app.use(incomes_1.default);
     app.use(expenses_2.default);
