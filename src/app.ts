@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import expensesRoute from "./routes/expenses";
 import incomesRoute from "./routes/incomes";
 import budgetsRoute from "./routes/budgets";
@@ -11,6 +12,8 @@ import globalErrorHandler from "./middleware/global-error-handler";
 
 export default () => {
   const app = express();
+
+  app.use(cors());
 
   app.use(express.json());
 

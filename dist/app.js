@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const expenses_1 = __importDefault(require("./routes/expenses"));
 const incomes_1 = __importDefault(require("./routes/incomes"));
 const budgets_1 = __importDefault(require("./routes/budgets"));
@@ -15,6 +16,7 @@ const not_found_1 = __importDefault(require("./routes/not-found"));
 const global_error_handler_1 = __importDefault(require("./middleware/global-error-handler"));
 exports.default = () => {
     const app = (0, express_1.default)();
+    app.use((0, cors_1.default)());
     app.use(express_1.default.json());
     app.get("/", (_req, res) => {
         // Send a response to the client
