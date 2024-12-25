@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import expensesRoute from "./routes/expenses";
 import incomesRoute from "./routes/incomes";
+import transactionsRoute from "./routes/transactions";
 import budgetsRoute from "./routes/budgets";
 import expenseAnalyticsRoute from "./routes/analytics/expenses";
 import incomeAnalyticsRoute from "./routes/analytics/incomes";
@@ -33,6 +34,8 @@ export default () => {
   app.use(expensesRoute);
 
   app.use(incomesRoute);
+
+  app.use(transactionsRoute);
 
   app.use(expenseAnalyticsRoute);
 
