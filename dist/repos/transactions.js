@@ -46,6 +46,7 @@ class TransactionsRepo {
         SELECT * FROM exp_trans
         UNION ALL 
         SELECT * FROM income_trans;
+        ORDER BY transaction_date DESC;
         `, [month, year]);
             return (0, to_camel_case_1.default)(rows);
         });
