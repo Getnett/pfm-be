@@ -32,7 +32,7 @@ export default class TransactionsRepo {
         
         SELECT * FROM exp_trans
         UNION ALL 
-        SELECT * FROM income_trans;
+        SELECT * FROM income_trans
         ORDER BY transaction_date DESC;
         `,
       [month, year]
