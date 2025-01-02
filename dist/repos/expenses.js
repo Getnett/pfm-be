@@ -23,8 +23,14 @@ class ExpensesRepo {
     }
     static getExpense(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            let expenseData = null;
             const { rows } = yield db_pool_1.default.query("SELECT * FROM expenses WHERE id = $1;", [id]);
-            return (0, to_camel_case_1.default)(rows)[0];
+            if ((_a = rows[0]) === null || _a === void 0 ? void 0 : _a.category_id) {
+                const categoryData = yield db_pool_1.default.query("SELECT category_name FROM categories WHERE id = $1", [rows[0].category_id]);
+                expenseData = [Object.assign(Object.assign({}, rows[0]), categoryData.rows[0])];
+            }
+            return (0, to_camel_case_1.default)(expenseData || rows)[0];
         });
     }
     static createExpense(reqBody) {

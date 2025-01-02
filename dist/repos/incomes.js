@@ -23,10 +23,14 @@ class IncomesRepo {
     }
     static getIncome(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { rows } = yield db_pool_1.default.query("SELECT * FROM incomes WHERE id = $1", [
-                id,
-            ]);
-            return (0, to_camel_case_1.default)(rows)[0];
+            var _a;
+            let incomeData = null;
+            const { rows } = yield db_pool_1.default.query("SELECT * FROM incomes WHERE id = $1;", [id]);
+            if ((_a = rows[0]) === null || _a === void 0 ? void 0 : _a.income_sources_id) {
+                const incomeSourceData = yield db_pool_1.default.query("SELECT income_source FROM income_sources WHERE id = $1;", [rows[0].income_sources_id]);
+                incomeData = [Object.assign(Object.assign({}, rows[0]), incomeSourceData.rows[0])];
+            }
+            return (0, to_camel_case_1.default)(incomeData || rows)[0];
         });
     }
     static createIncome(reqBody) {

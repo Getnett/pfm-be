@@ -9,10 +9,21 @@ export default class IncomesRepo {
   }
 
   static async getIncome(id: string) {
-    const { rows } = await dbPool.query("SELECT * FROM incomes WHERE id = $1", [
-      id,
-    ]);
-    return toCamelCase(rows)[0];
+    let incomeData = null;
+    const { rows } = await dbPool.query(
+      "SELECT * FROM incomes WHERE id = $1;",
+      [id]
+    );
+    if (rows[0]?.income_sources_id) {
+      const incomeSourceData = await dbPool.query(
+        "SELECT income_source FROM income_sources WHERE id = $1;",
+        [rows[0].income_sources_id]
+      );
+
+      incomeData = [{ ...rows[0], ...incomeSourceData.rows[0] }];
+    }
+
+    return toCamelCase(incomeData || rows)[0];
   }
 
   static async createIncome(reqBody: IncomePayload) {

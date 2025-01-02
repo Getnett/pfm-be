@@ -9,11 +9,21 @@ export default class ExpensesRepo {
   }
 
   static async getExpense(id: string) {
+    let expenseData = null;
     const { rows } = await dbpool.query(
       "SELECT * FROM expenses WHERE id = $1;",
       [id]
     );
-    return toCamelCase(rows)[0];
+
+    if (rows[0]?.category_id) {
+      const categoryData = await dbpool.query(
+        "SELECT category_name FROM categories WHERE id = $1",
+        [rows[0].category_id]
+      );
+      expenseData = [{ ...rows[0], ...categoryData.rows[0] }];
+    }
+
+    return toCamelCase(expenseData || rows)[0];
   }
 
   static async createExpense(reqBody: ExpensePayload) {
