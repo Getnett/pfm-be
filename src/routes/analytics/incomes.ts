@@ -32,6 +32,20 @@ router.get(
 );
 
 router.get(
+  "/api/analytics/incomes/monthly_total_income",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { month, year } = req.query;
+      const resData = await IncomeAnalytics.getTotalMonthlyIncome(
+        Number(month),
+        Number(year)
+      );
+      res.status(200).send(resData);
+    }
+  )
+);
+
+router.get(
   "/api/analytics/incomes/yearly_data",
   asyncErrorHandler(
     async (req: Request, res: Response, _next: NextFunction) => {

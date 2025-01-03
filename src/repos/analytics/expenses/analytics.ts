@@ -74,4 +74,13 @@ export default class ExpenseAnalytics {
     );
     return toCamelCase(rows);
   }
+
+  static async getMonthlyTotalSpend(month: number, year: number) {
+    const { rows } = await dbPool.query(
+      "SELECT SUM(amount) AS total FROM expenses WHERE  EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2;",
+      [month, year]
+    );
+
+    return toCamelCase(rows)[0];
+  }
 }

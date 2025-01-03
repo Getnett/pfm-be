@@ -28,6 +28,15 @@ export default class IncomeAnalytics {
     return toCamelCase(rows);
   }
 
+  static async getTotalMonthlyIncome(month: number, year: number) {
+    const { rows } = await dbPool.query(
+      "SELECT SUM(amount) AS total FROM incomes WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2",
+      [month, year]
+    );
+
+    return toCamelCase(rows)[0];
+  }
+
   static async getYearlyAnalytics(year: number) {
     const { rows } = await dbPool.query(
       `

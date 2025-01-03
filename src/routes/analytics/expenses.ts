@@ -32,6 +32,20 @@ router.get(
 );
 
 router.get(
+  "/api/analytics/expenses/monthly_total_spend",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { month, year } = req.query;
+      const resData = await ExpenseAnalytics.getMonthlyTotalSpend(
+        Number(month),
+        Number(year)
+      );
+      res.status(200).send(resData);
+    }
+  )
+);
+
+router.get(
   "/api/analytics/expenses/yearly_data",
   asyncErrorHandler(
     async (req: Request, res: Response, _next: NextFunction) => {

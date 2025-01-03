@@ -26,6 +26,11 @@ router.get("/api/analytics/incomes/monthly_daily_sources", (0, async_error_handl
     const resData = yield analytics_1.default.getMonthlyDailySourceIncomes(Number(month), Number(year));
     res.status(200).send(resData);
 })));
+router.get("/api/analytics/incomes/monthly_total_income", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { month, year } = req.query;
+    const resData = yield analytics_1.default.getTotalMonthlyIncome(Number(month), Number(year));
+    res.status(200).send(resData);
+})));
 router.get("/api/analytics/incomes/yearly_data", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { year } = req.query;
     const resData = yield analytics_1.default.getYearlyAnalytics(Number(year));
