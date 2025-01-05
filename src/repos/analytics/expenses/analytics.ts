@@ -56,7 +56,11 @@ export default class ExpenseAnalytics {
   static async getYearlyAnalytics(year: number) {
     const { rows } = await dbPool.query(
       `
-    SELECT SUM(amount) AS total,category_name,ROUND(SUM(amount)::numeric/(SELECT SUM(amount) FROM expenses) * 100,2) AS percentage
+    WITH  total_sum  AS (
+    SELECT SUM(amount) FROM  expenses
+    WHERE EXTRACT(YEAR FROM date) = $1
+    )
+    SELECT SUM(amount) AS total,category_name,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
     FROM expenses 
     JOIN  categories ON  expenses.category_id = categories.id 
     WHERE EXTRACT(YEAR FROM date) = $1
