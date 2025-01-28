@@ -5,35 +5,15 @@ export default class ExpenseAnalytics {
   static async getMonthlyAnalytics(month: number, year: number) {
     const { rows } = await dbPool.query(
       `
-      WITH expense_transaction  AS (SELECT 
-        DATE(date) AS transaction_date,
-        SUM(amount) AS total
+      WITH  total_sum  AS (
+        SELECT SUM(amount) FROM  expenses
+        WHERE EXTRACT(MONTH FROM date) = $1
+        )
+        SELECT SUM(amount) AS total,category_name,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
         FROM expenses 
-        WHERE EXTRACT(YEAR FROM date) = 2024 AND EXTRACT(MONTH FROM date) = 12
-        GROUP BY DATE(date)
-        ),
-         income_transaction  AS (
-        SELECT 
-        DATE(date) AS transaction_date,
-        SUM(amount) AS total
-        FROM incomes
-        WHERE EXTRACT(YEAR FROM date) = 2024 AND EXTRACT(MONTH FROM date) = 12
-        GROUP BY DATE(date)
-        ),
-        exp_trans AS (
-        SELECT * FROM expenses
-        JOIN categories ON categories.id = expenses.category_id
-        JOIN expense_transaction ON  DATE(expenses.date) = expense_transaction.transaction_date
-        ),
-        income_trans AS (
-        SELECT * FROM incomes
-        JOIN income_sources ON income_sources.id = incomes.income_sources_id
-        JOIN income_transaction ON DATE(incomes.date) = income_transaction.transaction_date
-        ) 
-        
-        
-        SELECT distinct *   FROM exp_trans
-        JOIN income_trans ON income_trans.transaction_date = exp_trans.transaction_date;
+        JOIN  categories ON  expenses.category_id = categories.id 
+        WHERE  EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2
+        GROUP BY category_name;
         
     `,
       [month, year]
@@ -60,13 +40,36 @@ export default class ExpenseAnalytics {
     SELECT SUM(amount) FROM  expenses
     WHERE EXTRACT(YEAR FROM date) = $1
     )
-    SELECT SUM(amount) AS total,category_name,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
+    SELECT SUM(amount) AS total,category_name,categories.id AS cat_id,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
     FROM expenses 
     JOIN  categories ON  expenses.category_id = categories.id 
     WHERE EXTRACT(YEAR FROM date) = $1
-    GROUP BY category_name;
+    GROUP BY category_name,categories.id;
     `,
       [year]
+    );
+
+    return toCamelCase(rows);
+  }
+
+  static async getYearlyExpenseAnalyticsByCategory(
+    catId: number,
+    year: number
+  ) {
+    const { rows } = await dbPool.query(
+      `
+        WITH  total_sum  AS (
+        SELECT SUM(amount) FROM  expenses
+        WHERE expenses.category_id = $1 AND EXTRACT(YEAR FROM date) = $2
+        )
+        SELECT note,category_name,date,amount, ROUND(amount::numeric / (SELECT * FROM total_sum) * 100,2) AS percentage  
+        FROM expenses 
+        JOIN categories ON expenses.category_id = categories.id
+        WHERE expenses.category_id = $1 AND EXTRACT(YEAR FROM date) = $2;
+      
+       
+        `,
+      [catId, year]
     );
 
     return toCamelCase(rows);
@@ -87,4 +90,36 @@ export default class ExpenseAnalytics {
 
     return toCamelCase(rows)[0];
   }
+  // SELECT note,category_name,date,amount,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
+  // FROM expenses
+  // JOIN categories ON expenses.category_id = categories.id
+  // WHERE expenses.category_id = $1 AND EXTRACT(YEAR FROM date) = $2;
+  // monthly
+  // data categorized by category
+  // total-amount,total-perc,categoryname -> goes detail
+
+  // yearly
+
+  // data categorized by category
+  // total-amount,total-perc,categoryname -> goes detail
+
+  // static async getYearlyAnalyticsByD(year: number) {
+  //   const { rows } = await dbPool.query(
+  //     `
+  //   WITH  total_sum  AS (
+  //   SELECT SUM(amount) FROM  expenses
+  //   WHERE EXTRACT(YEAR FROM date) = $1
+  //   )
+  //   SELECT SUM(amount) AS total,category_name,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
+  //   FROM expenses
+  //   JOIN  categories ON  expenses.category_id = categories.id
+  //   WHERE EXTRACT(YEAR FROM date) = $1
+  //   GROUP BY category_name,categories.category_id;
+
+  //   `,
+  //     [year]
+  //   );
+
+  //   return toCamelCase(rows);
+  // }
 }

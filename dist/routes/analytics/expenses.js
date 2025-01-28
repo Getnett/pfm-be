@@ -18,6 +18,7 @@ const async_error_handler_1 = __importDefault(require("../../middleware/async-er
 const router = express_1.default.Router();
 router.get("/api/analytics/expenses/monthly_data", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { month, year } = req.query;
+    console.log("req.query", req.query);
     const resData = yield analytics_1.default.getMonthlyAnalytics(Number(month), Number(year));
     res.status(200).send(resData);
 })));
@@ -34,6 +35,11 @@ router.get("/api/analytics/expenses/monthly_total_spend", (0, async_error_handle
 router.get("/api/analytics/expenses/yearly_data", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { year } = req.query;
     const resData = yield analytics_1.default.getYearlyAnalytics(Number(year));
+    res.status(200).send(resData);
+})));
+router.get("/api/analytics/expenses/category_yearly_data", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { catId, year } = req.query;
+    const resData = yield analytics_1.default.getYearlyExpenseAnalyticsByCategory(Number(catId), Number(year));
     res.status(200).send(resData);
 })));
 router.get("/api/analytics/expenses/yearly_monthly_spend", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
