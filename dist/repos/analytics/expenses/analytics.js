@@ -47,7 +47,7 @@ class ExpenseAnalytics {
     SELECT SUM(amount) FROM  expenses
     WHERE EXTRACT(YEAR FROM date) = $1
     )
-    SELECT SUM(amount) AS total,category_name,categories.id AS cat_id,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
+    SELECT SUM(amount) AS total,category_name,categories.id AS cat_id,$1 AS year,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
     FROM expenses 
     JOIN  categories ON  expenses.category_id = categories.id 
     WHERE EXTRACT(YEAR FROM date) = $1
@@ -63,7 +63,7 @@ class ExpenseAnalytics {
         SELECT SUM(amount) FROM  expenses
         WHERE expenses.category_id = $1 AND EXTRACT(YEAR FROM date) = $2
         )
-        SELECT note,category_name,date,amount, ROUND(amount::numeric / (SELECT * FROM total_sum) * 100,2) AS percentage  
+        SELECT expenses.id as expense_id, note,category_name,TO_CHAR(date,'DD mon') AS date,amount, ROUND(amount::numeric / (SELECT * FROM total_sum) * 100,2) AS percentage  
         FROM expenses 
         JOIN categories ON expenses.category_id = categories.id
         WHERE expenses.category_id = $1 AND EXTRACT(YEAR FROM date) = $2;
