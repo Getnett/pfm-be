@@ -18,15 +18,15 @@ class ExpenseAnalytics {
     static getMonthlyAnalytics(month, year) {
         return __awaiter(this, void 0, void 0, function* () {
             const { rows } = yield db_pool_1.default.query(`
-      WITH  total_sum  AS (
+        WITH  total_sum  AS (
         SELECT SUM(amount) FROM  expenses
         WHERE EXTRACT(MONTH FROM date) = $1
         )
-        SELECT SUM(amount) AS total,category_name,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
+        SELECT SUM(amount) AS total,category_name,categories.id  AS cat_id, ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
         FROM expenses 
         JOIN  categories ON  expenses.category_id = categories.id 
         WHERE  EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2
-        GROUP BY category_name;
+        GROUP BY category_name,categories.id;
         
     `, [month, year]);
             return (0, to_camel_case_1.default)(rows);
