@@ -73,6 +73,22 @@ class ExpenseAnalytics {
             return (0, to_camel_case_1.default)(rows);
         });
     }
+    // monthly
+    static getMonthlyExpenseAnalyticsByCategory(catId, month, year) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rows } = yield db_pool_1.default.query(`
+        WITH  total_sum  AS (
+        SELECT SUM(amount) FROM  expenses
+        WHERE expenses.category_id = $1 AND EXTRACT(MONTH FROM date) = $2 AND EXTRACT(YEAR FROM date) = $3
+        )
+        SELECT expenses.id as expense_id, note,category_name,TO_CHAR(date,'DD mon') AS date,amount, ROUND(amount::numeric / (SELECT * FROM total_sum) * 100,2) AS percentage  
+        FROM expenses 
+        JOIN categories ON expenses.category_id = categories.id
+        WHERE expenses.category_id = $1 AND EXTRACT(MONTH FROM date) = $2 AND EXTRACT(YEAR FROM date) = $3;
+      `, [catId, month, year]);
+            return (0, to_camel_case_1.default)(rows);
+        });
+    }
     static getYearlyMonthlySpend(year) {
         return __awaiter(this, void 0, void 0, function* () {
             const { rows } = yield db_pool_1.default.query(`SELECT SUM(amount) AS total,TO_CHAR(date,'DD mon') AS month FROM expenses GROUP BY month`);

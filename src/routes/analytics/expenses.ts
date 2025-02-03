@@ -74,6 +74,23 @@ router.get(
 );
 
 router.get(
+  "/api/analytics/expenses/category_monthly_data",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { catId, month, year } = req.query;
+      const resData =
+        await ExpenseAnalytics.getMonthlyExpenseAnalyticsByCategory(
+          Number(catId),
+          Number(month),
+          Number(year)
+        );
+
+      res.status(200).send(resData);
+    }
+  )
+);
+
+router.get(
   "/api/analytics/expenses/yearly_monthly_spend",
   asyncErrorHandler(
     async (req: Request, res: Response, _next: NextFunction) => {

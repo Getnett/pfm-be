@@ -75,6 +75,30 @@ export default class ExpenseAnalytics {
     return toCamelCase(rows);
   }
 
+  // monthly
+
+  static async getMonthlyExpenseAnalyticsByCategory(
+    catId: number,
+    month: number,
+    year: number
+  ) {
+    const { rows } = await dbPool.query(
+      `
+        WITH  total_sum  AS (
+        SELECT SUM(amount) FROM  expenses
+        WHERE expenses.category_id = $1 AND EXTRACT(MONTH FROM date) = $2 AND EXTRACT(YEAR FROM date) = $3
+        )
+        SELECT expenses.id as expense_id, note,category_name,TO_CHAR(date,'DD mon') AS date,amount, ROUND(amount::numeric / (SELECT * FROM total_sum) * 100,2) AS percentage  
+        FROM expenses 
+        JOIN categories ON expenses.category_id = categories.id
+        WHERE expenses.category_id = $1 AND EXTRACT(MONTH FROM date) = $2 AND EXTRACT(YEAR FROM date) = $3;
+      `,
+      [catId, month, year]
+    );
+
+    return toCamelCase(rows);
+  }
+
   static async getYearlyMonthlySpend(year: number) {
     const { rows } = await dbPool.query(
       `SELECT SUM(amount) AS total,TO_CHAR(date,'DD mon') AS month FROM expenses GROUP BY month`

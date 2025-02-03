@@ -42,6 +42,11 @@ router.get("/api/analytics/expenses/category_yearly_data", (0, async_error_handl
     const resData = yield analytics_1.default.getYearlyExpenseAnalyticsByCategory(Number(catId), Number(year));
     res.status(200).send(resData);
 })));
+router.get("/api/analytics/expenses/category_monthly_data", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { catId, month, year } = req.query;
+    const resData = yield analytics_1.default.getMonthlyExpenseAnalyticsByCategory(Number(catId), Number(month), Number(year));
+    res.status(200).send(resData);
+})));
 router.get("/api/analytics/expenses/yearly_monthly_spend", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { year } = req.query;
     const resData = yield analytics_1.default.getYearlyMonthlySpend(Number(year));
