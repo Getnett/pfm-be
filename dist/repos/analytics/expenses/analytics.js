@@ -91,7 +91,10 @@ class ExpenseAnalytics {
     }
     static getYearlyMonthlySpend(year) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { rows } = yield db_pool_1.default.query(`SELECT SUM(amount) AS total,TO_CHAR(date,'DD mon') AS month FROM expenses GROUP BY month`);
+            const { rows } = yield db_pool_1.default.query(`
+      SELECT SUM(amount) AS total,TO_CHAR(date,'DD mon') AS month FROM expenses
+      WHERE EXTRACT(YEAR FROM date) = $1
+      GROUP BY month`, [year]);
             return (0, to_camel_case_1.default)(rows);
         });
     }

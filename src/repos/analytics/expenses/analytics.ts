@@ -101,7 +101,11 @@ export default class ExpenseAnalytics {
 
   static async getYearlyMonthlySpend(year: number) {
     const { rows } = await dbPool.query(
-      `SELECT SUM(amount) AS total,TO_CHAR(date,'DD mon') AS month FROM expenses GROUP BY month`
+      `
+      SELECT SUM(amount) AS total,TO_CHAR(date,'DD mon') AS month FROM expenses
+      WHERE EXTRACT(YEAR FROM date) = $1
+      GROUP BY month`,
+      [year]
     );
     return toCamelCase(rows);
   }
