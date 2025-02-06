@@ -40,11 +40,11 @@ export default class IncomeAnalytics {
   static async getYearlyAnalytics(year: number) {
     const { rows } = await dbPool.query(
       `
-    SELECT SUM(amount) AS total,income_source,ROUND(SUM(amount)::numeric/(SELECT SUM(amount) FROM incomes) * 100,2) AS percentage
+    SELECT SUM(amount) AS total,income_source,income_sources.id AS ics_id, ROUND(SUM(amount)::numeric/(SELECT SUM(amount) FROM incomes) * 100,2) AS percentage
     FROM incomes 
     JOIN  income_sources ON  incomes.income_sources_id = income_sources.id   
     WHERE EXTRACT(YEAR FROM date) = $1
-    GROUP BY income_source;
+    GROUP BY income_source,income_sources.id;
     `,
       [year]
     );
