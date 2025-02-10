@@ -4,7 +4,11 @@ export default class IncomeAnalytics {
   static async getMonthlyAnalytics(month: number, year: number) {
     const { rows } = await dbPool.query(
       `
-    SELECT SUM(amount) AS total,income_source,income_sources.id AS ics_id,ROUND(SUM(amount)::numeric/(SELECT SUM(amount) FROM incomes) * 100,2) AS percentage
+    WITH  total_sum  AS (
+    SELECT SUM(amount) FROM  incomes
+    WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2
+    )  
+    SELECT SUM(amount) AS total,income_source,income_sources.id AS ics_id,ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
     FROM incomes 
     JOIN  income_sources ON  incomes.income_sources_id = income_sources.id 
     WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2

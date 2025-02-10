@@ -20,7 +20,7 @@ class ExpenseAnalytics {
             const { rows } = yield db_pool_1.default.query(`
         WITH  total_sum  AS (
         SELECT SUM(amount) FROM  expenses
-        WHERE EXTRACT(MONTH FROM date) = $1
+        WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2
         )
         SELECT SUM(amount) AS total,category_name,categories.id  AS cat_id, ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
         FROM expenses 
