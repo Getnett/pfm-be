@@ -50,6 +50,7 @@ router.get(
   asyncErrorHandler(
     async (req: Request, res: Response, _next: NextFunction) => {
       const { icsId, month, year } = req.query;
+      console.log({ icsId, month, year });
       const resData =
         await IncomeAnalytics.getMonthlyIncomeAnalyticsByIncomeSource(
           Number(icsId),
