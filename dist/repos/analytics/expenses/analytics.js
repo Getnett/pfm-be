@@ -35,7 +35,7 @@ class ExpenseAnalytics {
     static getMonthlyDailySpend(month, year) {
         return __awaiter(this, void 0, void 0, function* () {
             const { rows } = yield db_pool_1.default.query(`
-      SELECT SUM(amount),TO_CHAR(date,'DD mon') AS date FROM expenses 
+      SELECT SUM(amount) AS amount,TO_CHAR(date,'DD mon') AS date FROM expenses 
       WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2 
       GROUP BY TO_CHAR(date,'DD mon');
     `, [month, year]);
