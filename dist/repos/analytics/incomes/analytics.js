@@ -47,7 +47,11 @@ class IncomeAnalytics {
     static getYearlyAnalytics(year) {
         return __awaiter(this, void 0, void 0, function* () {
             const { rows } = yield db_pool_1.default.query(`
-    SELECT SUM(amount) AS total,income_source,income_sources.id AS ics_id,$1 AS year, ROUND(SUM(amount)::numeric/(SELECT SUM(amount) FROM incomes) * 100,2) AS percentage
+    WITH  total_sum  AS (
+    SELECT SUM(amount) FROM  incomes
+    WHERE EXTRACT(YEAR FROM date) = $1
+    )
+    SELECT SUM(amount) AS total,income_source,income_sources.id AS ics_id,$1 AS year, ROUND(SUM(amount)::numeric/(SELECT * FROM total_sum) * 100,2) AS percentage
     FROM incomes 
     JOIN  income_sources ON  incomes.income_sources_id = income_sources.id   
     WHERE EXTRACT(YEAR FROM date) = $1
