@@ -39,6 +39,31 @@ export default class IncomeAnalytics {
     return toCamelCase(rows)[0];
   }
 
+  // yearly info
+
+  static async getYearlyIncomeAnalyticsByIncomeSource(
+    icsId: number,
+    year: number
+  ) {
+    const { rows } = await dbPool.query(
+      `
+        WITH  total_sum  AS (
+        SELECT SUM(amount) FROM  incomes
+        WHERE incomes.income_sources_id = $1 AND EXTRACT(YEAR FROM date) = $2
+        )
+        SELECT incomes.id as income_id, note,income_source,TO_CHAR(date,'DD mon') AS date,amount, ROUND(amount::numeric / (SELECT * FROM total_sum) * 100,2) AS percentage  
+        FROM incomes 
+        JOIN income_sources ON incomes.income_sources_id = income_sources.id
+        WHERE incomes.income_sources_id = $1 AND EXTRACT(YEAR FROM date) = $2;
+      
+       
+        `,
+      [icsId, year]
+    );
+
+    return toCamelCase(rows);
+  }
+
   static async getYearlyAnalytics(year: number) {
     const { rows } = await dbPool.query(
       `

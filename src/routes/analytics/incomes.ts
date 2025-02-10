@@ -45,12 +45,27 @@ router.get(
   )
 );
 
+// income-source-yearly-data?icsId
 router.get(
   "/api/analytics/incomes/yearly_data",
   asyncErrorHandler(
     async (req: Request, res: Response, _next: NextFunction) => {
       const { year } = req.query;
       const resData = await IncomeAnalytics.getYearlyAnalytics(Number(year));
+      res.status(200).send(resData);
+    }
+  )
+);
+router.get(
+  "/api/analytics/incomes/income-source-yearly-data",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { icsId, year } = req.query;
+      const resData =
+        await IncomeAnalytics.getYearlyIncomeAnalyticsByIncomeSource(
+          Number(icsId),
+          Number(year)
+        );
       res.status(200).send(resData);
     }
   )
