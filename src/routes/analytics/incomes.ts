@@ -45,7 +45,22 @@ router.get(
   )
 );
 
-// income-source-yearly-data?icsId
+router.get(
+  "/api/analytics/incomes/income-source-monthly-data",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { icsId, month, year } = req.query;
+      const resData =
+        await IncomeAnalytics.getMonthlyExpenseAnalyticsByIncomeSource(
+          Number(icsId),
+          Number(month),
+          Number(year)
+        );
+      res.status(200).send(resData);
+    }
+  )
+);
+
 router.get(
   "/api/analytics/incomes/yearly_data",
   asyncErrorHandler(

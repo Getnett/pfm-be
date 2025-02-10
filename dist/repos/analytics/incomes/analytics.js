@@ -48,6 +48,21 @@ class IncomeAnalytics {
             return (0, to_camel_case_1.default)(rows)[0];
         });
     }
+    static getMonthlyExpenseAnalyticsByIncomeSource(icsId, month, year) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rows } = yield db_pool_1.default.query(`
+        WITH  total_sum  AS (
+        SELECT SUM(amount) FROM  incomes
+        WHERE incomes.income_sources_id = $1 AND EXTRACT(MONTH FROM date) = $2 AND EXTRACT(YEAR FROM date) = $3
+        )
+        SELECT incomes.id as income_id, note,income_source,TO_CHAR(date,'DD mon') AS date,amount, ROUND(amount::numeric / (SELECT * FROM total_sum) * 100,2) AS percentage  
+        FROM incomes 
+        JOIN income_sources ON incomes.income_sources_id = income_sources.id
+        WHERE incomes.income_sources_id = $1 AND EXTRACT(MONTH FROM date) = $2 AND EXTRACT(YEAR FROM date) = $3;
+      `, [icsId, month, year]);
+            return (0, to_camel_case_1.default)(rows);
+        });
+    }
     // yearly info
     static getYearlyIncomeAnalyticsByIncomeSource(icsId, year) {
         return __awaiter(this, void 0, void 0, function* () {
