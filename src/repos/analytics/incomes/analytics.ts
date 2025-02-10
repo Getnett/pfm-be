@@ -43,7 +43,7 @@ export default class IncomeAnalytics {
     return toCamelCase(rows)[0];
   }
 
-  static async getMonthlyExpenseAnalyticsByIncomeSource(
+  static async getMonthlyIncomeAnalyticsByIncomeSource(
     icsId: number,
     month: number,
     year: number

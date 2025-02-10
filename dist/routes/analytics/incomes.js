@@ -33,7 +33,7 @@ router.get("/api/analytics/incomes/monthly_total_income", (0, async_error_handle
 })));
 router.get("/api/analytics/incomes/income-source-monthly-data", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const { icsId, month, year } = req.query;
-    const resData = yield analytics_1.default.getMonthlyExpenseAnalyticsByIncomeSource(Number(icsId), Number(month), Number(year));
+    const resData = yield analytics_1.default.getMonthlyIncomeAnalyticsByIncomeSource(Number(icsId), Number(month), Number(year));
     res.status(200).send(resData);
 })));
 router.get("/api/analytics/incomes/yearly_data", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {

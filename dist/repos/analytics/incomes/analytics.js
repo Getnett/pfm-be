@@ -48,7 +48,7 @@ class IncomeAnalytics {
             return (0, to_camel_case_1.default)(rows)[0];
         });
     }
-    static getMonthlyExpenseAnalyticsByIncomeSource(icsId, month, year) {
+    static getMonthlyIncomeAnalyticsByIncomeSource(icsId, month, year) {
         return __awaiter(this, void 0, void 0, function* () {
             const { rows } = yield db_pool_1.default.query(`
         WITH  total_sum  AS (

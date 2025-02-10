@@ -51,7 +51,7 @@ router.get(
     async (req: Request, res: Response, _next: NextFunction) => {
       const { icsId, month, year } = req.query;
       const resData =
-        await IncomeAnalytics.getMonthlyExpenseAnalyticsByIncomeSource(
+        await IncomeAnalytics.getMonthlyIncomeAnalyticsByIncomeSource(
           Number(icsId),
           Number(month),
           Number(year)
