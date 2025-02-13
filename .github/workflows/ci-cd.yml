@@ -57,8 +57,8 @@ jobs:
             git pull origin main
             npm install
             echo "DATABASE_URL=${{secrets.DATABASE_URL}}" > .env
-            echo "OPENAI_API_KEY = ${{secrets.OPENAI_API_KEY}}" > .env
-            echo "ASSISTANT_ID = ${{secrets.ASSISTANT_ID}}" > .env
+            echo "OPENAI_API_KEY=${{secrets.OPENAI_API_KEY}}" > .env
+            echo "ASSISTANT_ID=${{secrets.ASSISTANT_ID}}" > .env
             pm2 restart pfm-be
             npm run migrate up
 
