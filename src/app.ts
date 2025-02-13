@@ -10,6 +10,7 @@ import financialGoalsRoute from "./routes/financial_goals";
 import accountsRoute from "./routes/accounts";
 import categoriesRoute from "./routes/categories";
 import incomeSourcesRepo from "./routes/income_sources";
+import assistantBot from "./routes/ai-assistant";
 import notFoundRoute from "./routes/not-found";
 import globalErrorHandler from "./middleware/global-error-handler";
 
@@ -20,7 +21,7 @@ export default () => {
 
   app.use(express.json());
 
-  app.get("/", (_req, res) => {
+  app.get("/", async (_req, res) => {
     // Send a response to the client
     res.send(`
      <html>
@@ -52,6 +53,8 @@ export default () => {
   app.use(categoriesRoute);
 
   app.use(incomeSourcesRepo);
+
+  app.use(assistantBot);
 
   // before all other routes
   app.use(notFoundRoute);
