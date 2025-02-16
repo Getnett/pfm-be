@@ -20,4 +20,9 @@ router.get("/api/categories", (0, async_error_handler_1.default)((req, res, _nex
     const resData = yield categories_1.default.getAllCategories();
     res.status(200).send(resData);
 })));
+router.post("/api/categories", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { categoryName } = req.body;
+    const resData = yield categories_1.default.addCategory(categoryName);
+    res.status(200).send(resData);
+})));
 exports.default = router;

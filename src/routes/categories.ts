@@ -14,4 +14,15 @@ router.get(
   )
 );
 
+router.post(
+  "/api/categories",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { categoryName } = req.body;
+      const resData = await CategoriesRepo.addCategory(categoryName);
+      res.status(200).send(resData);
+    }
+  )
+);
+
 export default router;

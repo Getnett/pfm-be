@@ -21,5 +21,14 @@ class CategoriesRepo {
             return (0, to_camel_case_1.default)(rows);
         });
     }
+    static addCategory(categoryName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rows } = yield db_pool_1.default.query(`
+       INSERT INTO categories (category_name)
+       VALUES ($1) RETURNING *;
+    `, [categoryName]);
+            return (0, to_camel_case_1.default)(rows)[0];
+        });
+    }
 }
 exports.default = CategoriesRepo;

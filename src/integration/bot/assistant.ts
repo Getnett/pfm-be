@@ -63,13 +63,11 @@ export default class AssistantBot {
       return "I don't have this information!";
     }
     if (run.status === "requires_action") {
-      console.log("after-1");
       if (
         run.required_action &&
         run.required_action.submit_tool_outputs &&
         run.required_action.submit_tool_outputs.tool_calls
       ) {
-        console.log("after-2");
         const toolsOuputs = [];
         for (const toolCall of run.required_action.submit_tool_outputs
           .tool_calls) {
