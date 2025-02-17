@@ -20,4 +20,10 @@ router.get("/api/income-sources", (0, async_error_handler_1.default)((req, res, 
     const resData = yield income_sources_1.default.getAllIncomeSources();
     res.status(200).send(resData);
 })));
+// addIncomeSource
+router.post("/api/income-sources", (0, async_error_handler_1.default)((req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { incomeSource } = req.body;
+    const resData = yield income_sources_1.default.createIncomeSource(incomeSource);
+    res.status(200).send(resData);
+})));
 exports.default = router;

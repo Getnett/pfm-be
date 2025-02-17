@@ -12,5 +12,16 @@ router.get(
     }
   )
 );
+// addIncomeSource
 
+router.post(
+  "/api/income-sources",
+  asyncErrorHandler(
+    async (req: Request, res: Response, _next: NextFunction) => {
+      const { incomeSource } = req.body;
+      const resData = await IncomeSourceRepo.createIncomeSource(incomeSource);
+      res.status(200).send(resData);
+    }
+  )
+);
 export default router;
