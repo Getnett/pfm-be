@@ -20,7 +20,6 @@ router.get("/api/accounts", (0, async_error_handler_1.default)((_req, res, _next
     const resData = yield accounts_1.default.getAllAccounts();
     res.status(200).send(resData);
 })));
-// getAllAccountList
 router.get("/api/account-list", (0, async_error_handler_1.default)((_req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     const resData = yield accounts_1.default.getAllAccountList();
     res.status(200).send(resData);

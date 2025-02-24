@@ -9,7 +9,8 @@ import incomeAnalyticsRoute from "./routes/analytics/incomes";
 import financialGoalsRoute from "./routes/financial_goals";
 import accountsRoute from "./routes/accounts";
 import categoriesRoute from "./routes/categories";
-import incomeSourcesRepo from "./routes/income_sources";
+import incomeSourcesRoute from "./routes/income_sources";
+import accountTypeRoute from "./routes/account-types";
 import assistantBot from "./routes/ai-assistant";
 import notFoundRoute from "./routes/not-found";
 import globalErrorHandler from "./middleware/global-error-handler";
@@ -52,7 +53,9 @@ export default () => {
 
   app.use(categoriesRoute);
 
-  app.use(incomeSourcesRepo);
+  app.use(incomeSourcesRoute);
+
+  app.use(accountTypeRoute);
 
   app.use(assistantBot);
 

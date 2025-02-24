@@ -24,6 +24,7 @@ const financial_goals_1 = __importDefault(require("./routes/financial_goals"));
 const accounts_1 = __importDefault(require("./routes/accounts"));
 const categories_1 = __importDefault(require("./routes/categories"));
 const income_sources_1 = __importDefault(require("./routes/income_sources"));
+const account_types_1 = __importDefault(require("./routes/account-types"));
 const ai_assistant_1 = __importDefault(require("./routes/ai-assistant"));
 const not_found_1 = __importDefault(require("./routes/not-found"));
 const global_error_handler_1 = __importDefault(require("./middleware/global-error-handler"));
@@ -53,6 +54,7 @@ exports.default = () => {
     app.use(accounts_1.default);
     app.use(categories_1.default);
     app.use(income_sources_1.default);
+    app.use(account_types_1.default);
     app.use(ai_assistant_1.default);
     // before all other routes
     app.use(not_found_1.default);

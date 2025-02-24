@@ -14,7 +14,6 @@ router.get(
   )
 );
 
-// getAllAccountList
 router.get(
   "/api/account-list",
   asyncErrorHandler(
