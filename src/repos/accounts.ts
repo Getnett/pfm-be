@@ -6,6 +6,13 @@ export default class AccountsRepo {
     const { rows } = await dbPool.query(`SELECT * FROM accounts;`);
     return toCamelCase(rows);
   }
+
+  static async getAllAccountList() {
+    const { rows } = await dbPool.query(
+      "SELECT id,account_name FROM accounts;"
+    );
+    return toCamelCase(rows);
+  }
   static async createAccount(payload: any) {
     // for now no account icon
     const { accountName, balance, note, accountType } = payload;

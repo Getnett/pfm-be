@@ -21,6 +21,12 @@ class AccountsRepo {
             return (0, to_camel_case_1.default)(rows);
         });
     }
+    static getAllAccountList() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rows } = yield db_pool_1.default.query("SELECT id,account_name FROM accounts;");
+            return (0, to_camel_case_1.default)(rows);
+        });
+    }
     static createAccount(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             // for now no account icon

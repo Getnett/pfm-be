@@ -14,6 +14,17 @@ router.get(
   )
 );
 
+// getAllAccountList
+router.get(
+  "/api/account-list",
+  asyncErrorHandler(
+    async (_req: Request, res: Response, _next: NextFunction) => {
+      const resData = await AccountsRepo.getAllAccountList();
+      res.status(200).send(resData);
+    }
+  )
+);
+
 router.post(
   "/api/accounts",
   asyncErrorHandler(
