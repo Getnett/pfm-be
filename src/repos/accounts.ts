@@ -3,7 +3,9 @@ import toCamelCase from "../utils/to-camel-case";
 
 export default class AccountsRepo {
   static async getAllAccounts() {
-    const { rows } = await dbPool.query(`SELECT * FROM accounts;`);
+    const { rows } = await dbPool.query(
+      `SELECT id,account_name,balance,account_icon FROM accounts;`
+    );
     return toCamelCase(rows);
   }
 
