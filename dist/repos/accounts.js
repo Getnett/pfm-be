@@ -17,7 +17,7 @@ const to_camel_case_1 = __importDefault(require("../utils/to-camel-case"));
 class AccountsRepo {
     static getAllAccounts() {
         return __awaiter(this, void 0, void 0, function* () {
-            const { rows } = yield db_pool_1.default.query(`SELECT id,account_name,balance,account_icon FROM accounts;`);
+            const { rows } = yield db_pool_1.default.query(`SELECT id,account_name,balance,note FROM accounts;`);
             return (0, to_camel_case_1.default)(rows);
         });
     }
