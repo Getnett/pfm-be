@@ -22,11 +22,11 @@ export default class TransactionsRepo {
         GROUP BY TO_CHAR(incomes.date,'Mon DD Day')
         ),
         exp_trans AS (
-        SELECT id,amount,note,date,transaction_date,total,type FROM expenses
+        SELECT id,amount,note, TO_CHAR(expenses.date, 'Mon DD Day') AS date ,transaction_date,total,type FROM expenses
         JOIN expense_transaction ON TO_CHAR(expenses.date, 'Mon DD Day')  = expense_transaction.transaction_date
         ),
         income_trans AS (
-        SELECT id,amount,note,date,transaction_date,total,type FROM incomes
+        SELECT id,amount,note,TO_CHAR(incomes.date, 'Mon DD Day') AS date,transaction_date,total,type FROM incomes
          JOIN income_transaction ON TO_CHAR(incomes.date, 'Mon DD Day')  = income_transaction.transaction_date
         ) 
         
